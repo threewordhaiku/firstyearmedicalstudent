@@ -3,11 +3,8 @@ Connecting working folder to Git
 2) git init
 3) git remote add origin [link]
 4) git fetch
-5) git branch [your branch name]
-6) git checkout [branch name]
-7) do a first commit (see below)
-8) git push set-upstream origin [branch name]
-
+5) do a first commit (see below)
+6) git push set-upstream origin master
 
 Uploading changes
 1) git add .
@@ -16,3 +13,7 @@ Uploading changes
 3) [add comments], press esc, type ":wq"
 4) git push
 
+Adding your own branch
+1) git branch [your branch name]
+2) git checkout [branch name]
+3) git push set-upstream origin [branch name]

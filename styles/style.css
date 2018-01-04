@@ -12,6 +12,10 @@ body {
   margin: 3rem;
 }
 
+.game-content {
+  display: none;
+}
+
 .btn-outline-secondary {
   color: #000;
   background-color: #fff;

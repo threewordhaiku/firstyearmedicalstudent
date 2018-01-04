@@ -1,0 +1,19 @@
+Connecting working folder to Git
+1) Either go to folder from Git bash or use windows explorer and right click Git Bash here
+2) git init
+3) git remote add origin [link]
+4) git fetch
+5) do a first commit (see below)
+6) git push set-upstream origin master
+
+Uploading changes
+1) git add .
+2) git commit
+2.5) (optional to avoid vim) git commit -m "[message here]"
+3) [add comments], press esc, type ":wq"
+4) git push
+
+Adding your own branch
+1) git branch [your branch name]
+2) git checkout [branch name]
+3) git push set-upstream origin [branch name]

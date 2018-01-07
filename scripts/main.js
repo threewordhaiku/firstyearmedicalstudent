@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $(".startmenu").click(function() {
+    $(".SMB").click(function() {
         $(".template").animate({
             "padding": "1.5rem",
             "margin": "1rem"

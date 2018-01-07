@@ -12,6 +12,10 @@ body {
   margin: 3rem;
 }
 
+.game-content {
+  display: none;
+}
+
 .SMB {}
 
 .btn-outline-secondary {

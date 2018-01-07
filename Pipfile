@@ -5,7 +5,7 @@ verify_ssl = true
 [packages]
 flask = "*"
 psycopg2 = "*"
-sqlchemy = "*"
+SQLAlchemy = "*"
 pandas = "*"
 
 [requires]

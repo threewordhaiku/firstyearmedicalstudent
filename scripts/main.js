@@ -1,5 +1,7 @@
-$(document).ready(function() {
-    $(".startmenu").click(function() {
-        $(".startmenu").fadeOut();
-    });
-});
+$(document).ready(
+	function() {
+	    $(".SMB").click(function() {
+	        $(".startmenu").fadeOut();
+	    });
+	}
+);

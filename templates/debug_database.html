@@ -2,6 +2,11 @@
 
 {% block head %}
     <script src="{{ url_for('static', filename='debug_database.js') }}"></script>
+
+    <!-- Scripts for blueimp/jQuery-File-Upload -->
+    <script src="{{ url_for('static', filename='jquery.ui.widget.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.iframe-transport.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.fileupload.js') }}"></script>
 {% endblock %}
 
 
@@ -18,31 +23,54 @@
               Select table
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='users') }}">users</a>
-              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='game_state') }}">game_state</a>
-              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='snippets') }}">snippets</a>
-              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='choices') }}">choices</a>
+              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='users') }}">users</a>
+              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='game_state') }}">game_state</a>
+              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='snippets') }}">snippets</a>
+              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='choices') }}">choices</a>
             </div>
           </div>
-            {% if query_results %}
+  {% if query_results %}
           <div style="margin:0.5rem">
             <p>
-              Showing results for table: <code>{{ table_name }}</code>
+              Showing results for table <code>{{ table_name }}</code>
               ({{ query_results|length - 1 }} rows)
             </p>
-            <button type="button" class="btn btn-inverted">
-              Upload to <code>{{ table_name }}</code>
-            </button>
-            <button type="button" class="btn btn-inverted">
+            <button type="button" class="btn btn-inverted" id="downloadbutton">
               Download <code>{{ table_name }}</code>
             </button>
+            <button type="button" class="btn btn-inverted" id="uploadbutton">
+              Upload to <code>{{ table_name }}</code>
+            </button>
+            <input id="fileupload" class="btn btn-inverted" type="file" accept="text/csv" name="file" data-url="{{ url_for('debug_database_upload', table_name=table_name) }}" style="opacity:0">
           </div>
-            {% endif %}
+          <script>
+          $(function () {
+              $('#fileupload').fileupload({
+                  dataType: 'json',
+                  done: function (e, data) {
+                    alert(Object.values(data.response().result) + ' uploaded successfully, reloading page.');
+                    window.location.href = window.location.href;
+                  }
+              });
+          });
+          </script>
+          <script>
+          $(document).ready(function() {
+            $('#uploadbutton').click(function() {
+              $("input[type='file']").trigger('click');
+            });
+
+            $('#downloadbutton').click(function() {
+              window.location.href = "{{ url_for('debug_database_download', table_name=table_name) }}";
+            });
+          });
+          </script>
+  {% endif %}
         </div>
       </div>
 
   {% if query_results %}
-      <table class="table">
+      <table class="table table-sm">
     {% for row in query_results %}
       {% if loop.index == 0 %}
         <thead>

@@ -17,6 +17,7 @@
     .template {
       padding: .5rem !important;
       margin: .5rem !important; 
+      display: block;
     }
 
     #downloadbutton, #uploadbutton {
@@ -29,6 +30,11 @@
 
     #fileupload {
       display:none;
+    }
+
+    .thead-light {
+      color: #495057;
+      background-color: #e9ecef;
     }
     </style>
 {% endblock %}
@@ -79,6 +85,8 @@
           </script>
           <script>
           $(document).ready(function() {
+            // $('.container').addClass('d-flex');
+            // $('.container').addClass('p-2');
             $('#uploadbutton').click(function() {
               $("input[type='file']").trigger('click');
             });
@@ -93,10 +101,11 @@
       </div>
 
   {% if query_results %}
+      
       <table class="table table-sm">
     {% for row in query_results %}
-      {% if loop.index == 0 %}
-        <thead>
+      {% if loop.first %}
+        <thead class="thead-light">
           <tr>
             {% for cell in row %}
             <th scope="col">{{ cell }}</th>
@@ -118,6 +127,7 @@
       {% endif %}
     {% endfor%}
       </table>
+
   {% endif %}
 {% endblock %}
 

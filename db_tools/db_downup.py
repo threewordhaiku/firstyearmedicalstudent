@@ -13,7 +13,7 @@ def fetch_table(table_name):
         DictCursor containing query results.
     """
     with Cursor("SELECT * FROM {}".format(table_name)) as cur:
-        return cur
+        return [[col.name for col in cur.description]] + [row for row in cur]
 
 
 def download_table(table_name, csv_joinstr='|'):

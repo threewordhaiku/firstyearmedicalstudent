@@ -7,17 +7,36 @@
     <script src="{{ url_for('static', filename='jquery.ui.widget.js') }}"></script>
     <script src="{{ url_for('static', filename='jquery.iframe-transport.js') }}"></script>
     <script src="{{ url_for('static', filename='jquery.fileupload.js') }}"></script>
+
+    <style>
+    .startmenu {
+      display: inline;
+    }
+
+    .template {
+      padding: .5rem;
+      margin: .5rem
+    }
+
+    #downloadbutton, #uploadbutton {
+      margin: 0.1rem;
+    }
+
+    .selected-table {
+      margin: 0.5rem;
+    }
+    </style>
 {% endblock %}
 
 
 {% block content %}
-      <div class="template" style="padding: .5rem; margin: .5rem">
+      <div class="template">
         <h2>
           Debugging tables
         </h2>
         <hr />
 
-        <div class="startmenu" style="display:inline;">
+        <div class="startmenu">
           <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Select table
@@ -30,7 +49,7 @@
             </div>
           </div>
   {% if query_results %}
-          <div style="margin:0.5rem">
+          <div class="selected-table">
             <p>
               Showing results for table <code>{{ table_name }}</code>
               ({{ query_results|length - 1 }} rows)

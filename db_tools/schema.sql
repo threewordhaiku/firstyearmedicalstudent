@@ -8,7 +8,7 @@ CREATE TABLE "saved_games" (
     flag3 int
 );
 
-DROP TABLE IF EXISTS snippets;
+DROP TABLE IF EXISTS snippets CASCADE;
 CREATE TABLE "snippets" (
     snip_id serial PRIMARY KEY,
     game_text text not null
@@ -33,6 +33,6 @@ CREATE TABLE "choices" (
     check_opr_2 text,
     check_val_2 int,
 
-    FOREIGN KEY (snip_id) REFERENCE snippets(snip_id),
-    FOREIGN KEY (next_snip_id) REFERENCE snippets(snip_id)
+    FOREIGN KEY (snip_id) REFERENCES snippets(snip_id),
+    FOREIGN KEY (next_snip_id) REFERENCES snippets(snip_id)
 );

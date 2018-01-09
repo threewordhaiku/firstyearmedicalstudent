@@ -2,6 +2,12 @@
 
 {% block head %}
     <script src="{{ url_for('static', filename='main_page.js') }}"></script>
+
+    <style>
+      .startmenu {
+        display: inline;
+      }
+    </style>
 {% endblock %}
 
 
@@ -13,7 +19,7 @@
         </h2>
         <hr />
 
-        <div class="startmenu" style="display:inline;">
+        <div class="startmenu">
           <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB">New</button>
           <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB">Load</button>
         </div>

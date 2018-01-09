@@ -4,10 +4,8 @@ Contains debugging functions:
     - reinit_db(): Re-initializes the database with sample table data
 """
 
-import os.join
+import os.path
 from . import Cursor
-
-basedir = os.path.abspath(os.path.dirname(__file__))
 
 def exec_file(abs_filepath):
     with open(abs_filepath) as f:
@@ -17,6 +15,7 @@ def exec_file(abs_filepath):
 
 
 def reinit_db():
+    basedir = os.path.abspath(os.path.dirname(__file__))
     for fname in ['schema.sql', 'sample.sql']:
-        abspath = os.join(basedir, fname)
+        abspath = os.path.join(basedir, fname)
         exec_file(abspath)

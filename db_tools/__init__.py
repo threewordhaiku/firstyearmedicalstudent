@@ -17,6 +17,8 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from urllib import parse
 
+#from .debugging import get_debug_connection
+
 # Setup for creating exported vars
 basedir = os.path.abspath(os.path.dirname(__file__))
 parse.uses_netloc.append("postgres")
@@ -29,7 +31,14 @@ POSTGRES_ENVVAR = 'DATABASE_URL' # Production DB
 
 # Retrieve and parse the URL in the env var
 DB_URL = os.environ[POSTGRES_ENVVAR]
-DB_PARSED_URL = parse.urlparse(os.environ[POSTGRES_ENVVAR])
+if DB_URL == r'postgres://$(whoami)':
+    debug_pw = os.environ.get('DEBUG_POSTGRES_PASSWORD', None)
+    if not debug_pw:
+        raise Exception("Password for local database connection not "
+                        "defined. Please set your password in the "
+                        "environment variable 'DEBUG_POSTGRES_PASSWORD'.")
+    DB_URL = 'postgres://postgres:{}@localhost:5432'.format(debug_pw)
+DB_PARSED_URL = parse.urlparse(DB_URL)
 print("Connecting to database at {}".format(DB_URL))
 
 
@@ -88,8 +97,6 @@ class Cursor():
     def _connect(self):
         """Used to setup a connection to the database"""
         try:
-            if DB_URL == r'postgres://$(whoami)':
-                return self._debug_connect()
             conn = psycopg2.connect(
                 database=DB_PARSED_URL.path[1:],
                 user=DB_PARSED_URL.username,
@@ -111,11 +118,6 @@ class Cursor():
         connection info.
         When running this app locally, you have to define 
         """
-        debug_pw = os.environ.get('DEBUG_POSTGRES_PASSWORD', None)
-        if not debug_pw:
-            raise Exception("Password for local database connection not "
-                            "defined. Please set your password in the "
-                            "environment variable 'DEBUG_POSTGRES_PASSWORD'.")
         conn = psycopg2.connect(
             database='postgres',
             user=r'postgres',

@@ -36,7 +36,7 @@ def debug_database_upload(table_name=None):
     
     f = request.files['file']
     print('get file:', f.filename)
-    #upload_table(f)
+    upload_table(table_name, f)
     # return json response to trigger JavaScript `done` callback
     return jsonify([f.filename])
 
@@ -46,8 +46,7 @@ def debug_database_download(table_name=None):
     if (not table_name):
         return redirect(url_for('debug_database', table_name=table_name))    
     
-    #output = download_table(table_name)
-    output = "foo|bar|baz\neggs|ham|spam"
+    output = download_table(table_name)
     csv_fname = table_name + '.csv'
     with open(os.path.join('static', csv_fname), 'w', encoding='utf-8') as f:
         f.write(output)

@@ -38,7 +38,8 @@ def download_table(table_name, csv_joinstr='|'):
         cur.execute(sql)
     
         #table headers
-        table_heads = [desc[0] for desc in cur.description]
+        table_heads = [col.name for col in cur.description]
+        print(table_heads, 'list len', len(table_heads))
         output_strs.append(
             csv_joinstr.join(table_heads)
         )
@@ -68,7 +69,7 @@ def upload_table(table_name, csv):
     #Create a connection to the database
     engine = create_engine(DB_URL)
     #Reads the csv file to a pandas dataframe
-    csv_data = pd.read_csv(csv)
+    csv_data = pd.read_csv(csv, delimiter='|')
     
     #Insert Dataframe to sql
     #If table exists, drop it, recreate it, and insert data. Create if does not exist.

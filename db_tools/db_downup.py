@@ -69,7 +69,8 @@ def upload_table(table_name, csv):
     #Create a connection to the database
     engine = create_engine(DB_URL)
     #Reads the csv file to a pandas dataframe
-    csv_data = pd.read_csv(csv, delimiter='|')
+    #Skip first 2 rows; they are table name and header row
+    csv_data = pd.read_csv(csv, delimiter='|', skiprows=2)
     
     #Insert Dataframe to sql
     #If table exists, drop it. Cascade option drops foreign key dependents.

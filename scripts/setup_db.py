@@ -1,6 +1,7 @@
 """
-Script for Heroku CLI. Usage:
-    $ heroku run reinit_db
+Script for Heroku CLI. 
+Usage:
+    heroku run reinit_db
 """
 
 from db_tools.debugging import reinit_db

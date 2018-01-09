@@ -7,10 +7,10 @@ def fetch_table(table_name):
     """Fetches all rows from the given table_name
 
     Args:
-        table_name: Name of the table to download as a string.
+        table_name: Name of the table to fetch from.
 
     Returns:
-        DictCursor containing query results.
+        List of table headers and rows extracted from DictResult.
     """
     with Cursor("SELECT * FROM {}".format(table_name)) as cur:
         return [[col.name for col in cur.description]] + [row for row in cur]
@@ -26,7 +26,8 @@ def download_table(table_name, csv_joinstr='|'):
                      Default: '|' (single pipe)
     
     Returns:
-        String ready to be dumped into a CSV file
+        String ready to be dumped into a CSV file.
+        First line of string contains table headers.
     """
     #Create a list to store table values, including table name and headers
     #table name

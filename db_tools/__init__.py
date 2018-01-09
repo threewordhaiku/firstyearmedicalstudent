@@ -1,5 +1,5 @@
 """
-db_tools.py
+module db_tools
 
 Exports:
   Classes:
@@ -17,7 +17,6 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from urllib import parse
 
-#from .debugging import get_debug_connection
 
 # Setup for creating exported vars
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -29,7 +28,8 @@ SCHEMA = os.path.join(basedir, 'schema.sql')
 # Name of the env var on Heroku containing the URL to the PostgreSQL db
 POSTGRES_ENVVAR = 'DATABASE_URL' # Production DB
 
-# Retrieve and parse the URL in the env var
+# Retrieve URL in the env var
+# Create localhost URI if DB_URL uses $(whoami) to imply localhost connection
 DB_URL = os.environ[POSTGRES_ENVVAR]
 if DB_URL == r'postgres://$(whoami)':
     debug_pw = os.environ.get('DEBUG_POSTGRES_PASSWORD', None)
@@ -38,6 +38,8 @@ if DB_URL == r'postgres://$(whoami)':
                         "defined. Please set your password in the "
                         "environment variable 'DEBUG_POSTGRES_PASSWORD'.")
     DB_URL = 'postgres://postgres:{}@localhost:5432'.format(debug_pw)
+
+# Parse URI into a ParseResult
 DB_PARSED_URL = parse.urlparse(DB_URL)
 print("Connecting to database at {}".format(DB_URL))
 

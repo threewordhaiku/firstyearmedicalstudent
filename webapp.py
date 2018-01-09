@@ -8,6 +8,8 @@ from flask import Flask, jsonify, make_response, redirect, render_template, \
 # Local modules
 from db_tools.db_downup import download_table, fetch_table, upload_table
 
+
+# Init app
 app = Flask(__name__)
 
 
@@ -19,10 +21,15 @@ def main_page():
 @app.route('/database')
 @app.route('/database/<table_name>')
 def debug_database(table_name=None):
+    """Performs query to fetch all table rows.
+
+    Args:
+        table_name: Name of the table to fetch rows from.
+                    Default: None
+    """
     query_results = []
     if table_name:
         query_results = fetch_table(table_name)
-        #query_results = [['this', 'is', 'a', 'sample', 'db', 'response']] + [[*'abcdef']] * 500
 
     return render_template('debug_database.html', 
                            table_name=table_name, 
@@ -31,6 +38,16 @@ def debug_database(table_name=None):
 
 @app.route('/database/<table_name>/upload', methods=['GET', 'POST'])
 def debug_database_upload(table_name=None):
+    """Accepts csv file to replace into target table.
+
+    Args:
+        table_name: Name of the table to upload and replace into.
+                    Default: None
+
+    Returns:
+        JSON object containing the name of the uploaded file.
+        Mainly just to trigger client-side JavaScript callback.
+    """
     if (not table_name) or (request.method == 'GET'):
         return redirect(url_for('debug_database', table_name=table_name))    
     
@@ -43,6 +60,15 @@ def debug_database_upload(table_name=None):
 
 @app.route('/database/<table_name>/download')
 def debug_database_download(table_name=None):
+    """Downloads table data as csv file.
+    
+    Args:
+        table_name: Name of the table to downlaod from.
+                    Default: None
+
+    Returns:
+        302 Redirect to download the generated file.
+    """
     if (not table_name):
         return redirect(url_for('debug_database', table_name=table_name))    
     

@@ -72,7 +72,11 @@ def upload_table(table_name, csv):
     csv_data = pd.read_csv(csv, delimiter='|')
     
     #Insert Dataframe to sql
-    #If table exists, drop it, recreate it, and insert data. Create if does not exist.
+    #If table exists, drop it. Cascade option drops foreign key dependents.
+    with Cursor() as cur:
+        cur.execute("DROP TABLE IF EXISTS {} CASCADE;".format(table_name))
+
+    #Recreate table, and insert data. Create if does not exist.
     csv_data.to_sql(table_name, engine, if_exists='replace')
     return
 

@@ -24,4 +24,4 @@ set FLASK_APP=webapp.py
 set FLASK_DEBUG=1
 
 REM Start the server
-flask run
+python webapp.py

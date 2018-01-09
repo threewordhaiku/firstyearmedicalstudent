@@ -6,7 +6,7 @@ from flask import Flask, jsonify, make_response, redirect, render_template, \
                   request, url_for
 
 # Local modules
-from .db_tools.db_downup import download_table, fetch_table, upload_table
+from db_tools.db_downup import download_table, fetch_table, upload_table
 
 app = Flask(__name__)
 
@@ -58,4 +58,9 @@ if __name__ == '__main__':
     # Bind to env var PORT if defined, otherwise default to 5000.
     # https://stackoverflow.com/a/17276310
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+
+    # Figure out if debugging is wanted
+    debugging = int(os.environ.get('FLASK_DEBUG', 0))
+    host = '127.0.0.1' if debugging else '0.0.0.0'
+
+    app.run(host=host, port=port)

@@ -49,6 +49,14 @@ body {
   background-color: #f5f5f5;
 }
 
+/* Sticky footer styles
+-------------------------------------------------- */
+.dropdown-item:active {
+  background-color: #868e96;
+}
+
+
+
 
 /* Custom page CSS
 -------------------------------------------------- */

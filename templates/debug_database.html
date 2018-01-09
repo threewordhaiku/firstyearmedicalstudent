@@ -1,0 +1,72 @@
+{% extends "index.html" %}
+
+{% block head %}
+    <script src="{{ url_for('static', filename='debug_database.js') }}"></script>
+{% endblock %}
+
+
+{% block content %}
+      <div class="template" style="padding: .5rem; margin: .5rem">
+        <h2>
+          Debugging tables
+        </h2>
+        <hr />
+
+        <div class="startmenu" style="display:inline;">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select table
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='users') }}">users</a>
+              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='game_state') }}">game_state</a>
+              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='snippets') }}">snippets</a>
+              <a class="dropdown-item" href="{{ url_for('show_debug_database', table_name='choices') }}">choices</a>
+            </div>
+          </div>
+            {% if query_results %}
+          <div style="margin:0.5rem">
+            <p>
+              Showing results for table: <code>{{ table_name }}</code>
+              ({{ query_results|length - 1 }} rows)
+            </p>
+            <button type="button" class="btn btn-inverted">
+              Upload to <code>{{ table_name }}</code>
+            </button>
+            <button type="button" class="btn btn-inverted">
+              Download <code>{{ table_name }}</code>
+            </button>
+          </div>
+            {% endif %}
+        </div>
+      </div>
+
+  {% if query_results %}
+      <table class="table">
+    {% for row in query_results %}
+      {% if loop.index == 0 %}
+        <thead>
+          <tr>
+            {% for cell in row %}
+            <th scope="col">{{ cell }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+      {% else %}
+        <tbody>
+          <tr>
+        {% for cell in row %}
+          {% if loop.first %}
+            <th scope="row">{{ row[0] }}</th>
+          {% else %}
+            <td>{{ cell }}</td>
+          {% endif %}
+        {% endfor %}
+          </tr>
+        </tbody>
+      {% endif %}
+    {% endfor%}
+      </table>
+  {% endif %}
+{% endblock %}
+

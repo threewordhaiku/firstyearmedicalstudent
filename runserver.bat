@@ -14,7 +14,6 @@ REM //////////////////////////////////////////////////////////////////////////
 REM Using the Heroku-recommended env var for URLs. The app will load custom
 REM connection info when it encounters this value in DATABASE_URL.
 set DATABASE_URL=postgres://$(whoami)
-set HEROKU_POSTGRESQL_ROSE_URL=postgres://$(whoami)
 
 REM Place the password to your "postgres" user here (usually defined during
 REM installation). This variable should not be left blank.

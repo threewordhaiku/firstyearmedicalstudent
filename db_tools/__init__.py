@@ -25,8 +25,7 @@ parse.uses_netloc.append("postgres")
 SCHEMA = os.path.join(basedir, 'schema.sql')
 
 # Name of the env var on Heroku containing the URL to the PostgreSQL db
-#POSTGRES_ENVVAR = 'DATABASE_URL'                # Production DB
-POSTGRES_ENVVAR = 'HEROKU_POSTGRESQL_ROSE_URL'  # Debugging DB
+POSTGRES_ENVVAR = 'DATABASE_URL' # Production DB
 
 # Retrieve and parse the URL in the env var
 DB_URL = os.environ[POSTGRES_ENVVAR]

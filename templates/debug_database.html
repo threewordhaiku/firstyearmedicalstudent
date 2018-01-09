@@ -11,11 +11,12 @@
     <style>
     .startmenu {
       display: inline;
+      margin: 0.5rem !important;
     }
 
     .template {
-      padding: .5rem;
-      margin: .5rem
+      padding: .5rem !important;
+      margin: .5rem !important; 
     }
 
     #downloadbutton, #uploadbutton {
@@ -24,6 +25,10 @@
 
     .selected-table {
       margin: 0.5rem;
+    }
+
+    #fileupload {
+      display:none;
     }
     </style>
 {% endblock %}
@@ -42,8 +47,7 @@
               Select table
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='users') }}">users</a>
-              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='game_state') }}">game_state</a>
+              <a class="dropdown-item" href="{{ url_for('debug_database', table_name='saved_games') }}">saved_games</a>
               <a class="dropdown-item" href="{{ url_for('debug_database', table_name='snippets') }}">snippets</a>
               <a class="dropdown-item" href="{{ url_for('debug_database', table_name='choices') }}">choices</a>
             </div>
@@ -60,7 +64,7 @@
             <button type="button" class="btn btn-inverted" id="uploadbutton">
               Upload to <code>{{ table_name }}</code>
             </button>
-            <input id="fileupload" class="btn btn-inverted" type="file" accept="text/csv" name="file" data-url="{{ url_for('debug_database_upload', table_name=table_name) }}" style="opacity:0">
+            <input id="fileupload" class="btn btn-inverted" type="file" accept="text/csv" name="file" data-url="{{ url_for('debug_database_upload', table_name=table_name) }}">
           </div>
           <script>
           $(function () {

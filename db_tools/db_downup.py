@@ -2,6 +2,20 @@ from . import Cursor, DB_URL
 from sqlalchemy import create_engine
 import pandas as pd
 
+
+def fetch_table(table_name):
+    """Fetches all rows from the given table_name
+
+    Args:
+        table_name: Name of the table to download as a string.
+
+    Returns:
+        DictCursor containing query results.
+    """
+    with Cursor("SELECT * FROM {}".format(table_name)) as cur:
+        return cur
+
+
 def download_table(table_name, csv_joinstr='|'):
     """Gets the given table_name as a CSV-ready string.
 
@@ -47,6 +61,9 @@ def upload_table(table_name, csv):
         table_name: String identifying the table to overwrite.
 
         csv: File-like object containing the csv file.
+
+    Returns:
+        None
     """
     #Create a connection to the database
     engine = create_engine(DB_URL)

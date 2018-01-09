@@ -1,5 +1,12 @@
+# Standard libary
 import os
-from flask import Flask, jsonify, make_response, redirect, render_template, request, url_for
+
+# Third-party modules
+from flask import Flask, jsonify, make_response, redirect, render_template, \
+                  request, url_for
+
+# Local modules
+from .db_tools.db_downup import download_table, fetch_table, upload_table
 
 app = Flask(__name__)
 
@@ -14,8 +21,8 @@ def main_page():
 def debug_database(table_name=None):
     query_results = []
     if table_name:
-        #query_results = fetch_table(table_name)
-        query_results = [['this', 'is', 'a', 'sample', 'db', 'response']] + [[*'abcdef']] * 500
+        query_results = fetch_table(table_name)
+        #query_results = [['this', 'is', 'a', 'sample', 'db', 'response']] + [[*'abcdef']] * 500
 
     return render_template('debug_database.html', 
                            table_name=table_name, 

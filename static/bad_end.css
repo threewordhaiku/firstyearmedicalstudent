@@ -21,15 +21,40 @@ body {
 .text2 {
   display: none;
 }
-
 .text3 {
   display: none;
 }
-
 .text4 {
   display: none;
 }
-
+.text5 {
+  display: none;
+}
+.text6 {
+  display: none;
+}
+.text7 {
+  display: none;
+}
+.text8 {
+  display: none;
+}
+.text9 {
+  display: none;
+}
+.text10 {
+  display: none;
+}
+.text11 {
+  display: none;
+}
+.text12 {
+  display: none;
+  font-family: "EB Garamond";
+  font-size: 30px;
+  color: #cc0000;
+  text-align: center;
+}
 .btn-outline-secondary {
   color: #000;
   background-color: #fff;

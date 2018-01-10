@@ -9,8 +9,9 @@ text = ".text1"
 
 $(document).ready(function() {
     $(".nxtbtn").click(function() {
-    	text = next_text(text)
-        $(text).fadeIn();
+    	$(text).fadeOut();
+    	text = next_text(text);
+        $(text).delay(300).fadeIn();
     });
 });
 

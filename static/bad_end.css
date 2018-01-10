@@ -12,7 +12,29 @@ body {
   width: 320px;
   padding: 10px;
   margin: 0;
+}
 
+.overlay{
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-image: url("http://moziru.com/images/blood-clipart-frame-16.png");
+  background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  opacity: 0;
+  background: rgba(39, 42, 43, 0.8);
+  transition: opacity 200ms ease-in-out;
+  border-radius: 4px;
+  margin: -15px 0 0 -15px;
+  button { 
+  margin:5px;
+  } 
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .nxtbtn {}

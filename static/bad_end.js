@@ -20,5 +20,9 @@ function next_text(current_text) {
 	nextstr = nextint.toString();
 	temp = ".text";
 	counter++;
-	return temp.concat(nextstr)
+	if (next >= 12){
+		return ".text12"}
+	else{
+		return temp.concat(nextstr)
+	}
 }

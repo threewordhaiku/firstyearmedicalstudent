@@ -12,6 +12,7 @@ body {
   width: 320px;
   padding: 10px;
   margin: 0;
+
 }
 
 .nxtbtn {}
@@ -98,7 +99,9 @@ body {
 /* Not required for template or sticky footer method. */
 
 .container {
-  width: auto;
-  max-width: 680px;
+  width: 500px;
+  height: 100px;
+  //max-width: 680px;
   padding: 0 15px;
+  margin: auto;
 }

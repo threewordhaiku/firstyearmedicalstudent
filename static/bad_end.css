@@ -8,15 +8,19 @@ body {
   text-align: center;
 }
 
-.startmenu {
-  margin: 3rem;
-}
-
 .game-content {
-  display: none;
+  width: 320px;
+  padding: 10px;
+  margin: 0;
 }
 
 .nxtbtn {}
+
+.text1 {}
+
+.text2 {
+  display: none;
+}
 
 .btn-outline-secondary {
   color: #000;
@@ -26,7 +30,7 @@ body {
 }
 
 .btn-outline-secondary:hover {
-  background-color: #000;
+  background-color: #303030;
   border-color: #000;
 }
 
@@ -54,8 +58,6 @@ body {
 .dropdown-item:active {
   background-color: #868e96;
 }
-
-
 
 
 /* Custom page CSS

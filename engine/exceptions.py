@@ -1,0 +1,56 @@
+class ChoiceError(Exception):
+    """Basic exception for errors raised by Choices"""
+    def __init__(self, choice, msg=None):
+        if msg is None:
+            msg = "An error occured with choice %s" % str(choice)
+        super(ChoiceError, self).__init__(msg)
+        self.choice = choice
+
+
+class BadExpression(ChoiceError):
+    """Bad expression provided to Choice"""
+    def __init__(self, choice, expr, msg=None):
+        if msg is None:
+            msg = ('Bad expression provided for choice {} '
+                   '(expected "flag_name->str operator->str value->int", '
+                   'got "{}")'
+                ).format(choice, expr)
+        super(BadExpression, self).__init__(choice, msg=msg)
+        self.choice = choice
+        self.expression = expr
+
+
+
+
+
+
+
+
+class SnippetError(Exception):
+    """Basic exception for errors raised by Snippets"""
+    def __init__(self, snippet, msg=None):
+        if msg is None:
+            msg = ("An error occured with snippet {}"
+                ).format(str(snippet))
+        super(SnippetError, self).__init__(msg)
+        self.snippet = snippet
+
+
+class CannotRedefineSnipID(Exception):
+    """Attempted to redefine snip_id"""
+    def __init__(self, snippet):
+        msg = ('Attempted to overwrite {} for snippet {}'
+            ).format(snippet.snip_id, str(snippet))
+        super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
+        self.snip_id = snip.snip_id
+        self.snippet = snippet
+
+
+class TerminalSnippetError(SnippetError):
+    """Attempted to extend a Terminal Snippet"""
+    def __init__(self, snippet, msg=None):
+        if msg is None:
+            msg = ('Attempted invalid action on Terminal Snippet'
+                ).format(str(snippet))
+        super(TerminalSnippetError, self).__init__(snippet, msg=msg)
+        self.snippet = snippet

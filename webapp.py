@@ -1,9 +1,11 @@
 # Standard libary
 import os
+import os.path
 
 # Third-party modules
 from flask import Flask, jsonify, make_response, redirect, render_template, \
                   request, url_for
+import click
 
 # Local modules
 from db_tools.db_downup import download_table, fetch_table, upload_table
@@ -77,6 +79,73 @@ def debug_database_download(table_name=None):
     with open(os.path.join('static', csv_fname), 'w', encoding='utf-8') as f:
         f.write(output)
     return redirect(url_for('static', filename=csv_fname))
+
+
+@app.cli.command(with_appcontext=True)
+def render():
+    """Pre-renders templates into a folder for easy preview
+
+    You can't pass args from Flask CLI into this function so just change the
+    settings below.
+    """
+    # Define the templates you want to render here
+    templates = [
+        ['debug_database.html', dict(
+            table_name='snippets',
+            query_results=[['this', 'is', 'a', 'sample', 'db', 'response']] + [[*'abcdef']] * 10
+        )],
+        'main_page.html'
+    ]
+
+    # Options
+    output_folder='prerenders'
+    update_gitignore=True
+
+    # Shorthand
+    osp = os.path
+
+    with app.test_request_context('/'):
+
+        basedir = osp.abspath(os.path.dirname(__file__))
+        abs_outputfolder = osp.join(basedir, output_folder)
+
+        # Prep target dir
+        if not osp.exists(output_folder):
+            os.mkdir(output_folder)
+
+        click.echo('Pre-rendering...')
+        for t in templates:
+            # Echo to CLI for feedback
+            click.echo('  {}'.format(str(t)))
+
+            # Prep vars
+            templatename = t
+            options = dict()
+
+            # If t is a list, first item should be template name, second
+            # should be a dict of options to pass to render_template
+            if type(t) == list:
+                templatename, options = t
+
+            with open(osp.join(abs_outputfolder, templatename), 
+                      'w', encoding='utf-8') as f:
+                s = render_template(templatename, **options)
+                f.write(s.replace(r'/static/', r'../static/'))
+
+    # Update .gitignore
+    if not update_gitignore:
+        return
+    gitignore_path = osp.join(basedir, '.gitignore')
+    addline = output_folder + r'/*'
+    click.echo('Updating .gitignore...')
+    with open(gitignore_path, 'a+') as f:
+        for line in f.readlines():
+            if line == addline:
+                click.echo('  Prerender folder already ignored, skipping')
+                break
+        else:
+            click.echo('  Updated.')
+            f.write('\n' + addline)
 
 
 if __name__ == '__main__':

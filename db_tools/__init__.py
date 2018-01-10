@@ -41,7 +41,7 @@ if DB_URL == r'postgres://$(whoami)':
 
 # Parse URI into a ParseResult
 DB_PARSED_URL = parse.urlparse(DB_URL)
-print("Connecting to database at {}".format(DB_URL))
+print("Using database at {}".format(DB_PARSED_URL.hostname))
 
 
 class Cursor():

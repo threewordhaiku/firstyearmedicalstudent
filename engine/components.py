@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from .exceptions import *
-from .compiler import compile_snippet
+from .compiler import snippet_chain_to_sql_data
 
 
 class Choice():
@@ -148,7 +148,7 @@ class Snippet():
 
     def get_child_snippets(self):
         """Gets all 'downstream' Snippets connected to this one"""
-        if self.child_snippets:
+        if getattr(self, 'child_snippets', None):
             return self.child_snippets
         unwalked = [self]
         seen = OrderedDict()
@@ -171,6 +171,11 @@ class Snippet():
         sql = """INSERT INTO snippets(snip_id, game_text) VALUES (%s %s)"""
         data = (snip_id, game_text)
         return sql, data
+
+
+    def generate_chain_sql(self):
+        query, data = snippet_chain_to_sql_data(self)
+        return query, data
 
 
     def __repr__(self):

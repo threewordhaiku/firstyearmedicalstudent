@@ -50,15 +50,16 @@ print("Using database at {}".format(DB_PARSED_URL.hostname))
 class AppDBConnection():
     """Simple class that provides a connection to the app db.
 
-    AppDBConnections are threadsafe, but their cursors are not. If you're not 
-    sure how cursors work, use the AppCursor instead.
+    AppDBConnections are threadsafe, but their cursors are not. Remember to
+    always teardown connections after you're done with them.
+    If you're not sure how cursors work, use the AppCursor instead.
 
     Usage: 
         conn = AppDBConnection()
         cur = conn.cursor
         cur.execute('query1')
         cur.execute('query2')
-        conn.teardown()
+        conn.teardown()  # Note: always teardown connections when you're done
     """
     def __init__(self):
         self.cursors = []
@@ -107,6 +108,8 @@ class AppDBConnection():
 
 class AppCursor(AppDBConnection):
     """Context manager for executing simple queries
+
+    Exiting the `with` context will commit and close the connection for you.
 
     Usage:
         with AppCursor as cur:

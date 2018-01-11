@@ -41,7 +41,6 @@ def download_table(table_name, csv_joinstr='|'):
     
         #table headers
         table_heads = [col.name for col in cur.description]
-        print(table_heads, 'list len', len(table_heads))
         output_strs.append(
             csv_joinstr.join(table_heads)
         )

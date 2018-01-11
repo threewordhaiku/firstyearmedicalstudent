@@ -5,12 +5,12 @@ Contains debugging functions:
 """
 
 import os.path
-from . import Cursor
+from . import AppCursor
 
 def exec_file(abs_filepath):
     with open(abs_filepath) as f:
         content = f.read()
-    with Cursor() as cur:
+    with AppCursor() as cur:
         cur.execute(content)
 
 

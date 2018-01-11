@@ -27,7 +27,7 @@ class SnippetError(Exception):
     def __init__(self, snippet, msg=None):
         if msg is None:
             msg = ("An error occured with snippet {}"
-                ).format(str(snippet))
+                  ).format(str(snippet))
         super(SnippetError, self).__init__(msg)
         self.snippet = snippet
 
@@ -37,7 +37,7 @@ class CannotRedefineSnipID(SnippetError):
     def __init__(self, snippet):
         msg = ('Attempted to overwrite snip_id {} for snippet {} '
                '(has this snippet already been committed?)'
-            ).format(snippet.snip_id, str(snippet))
+              ).format(snippet.snip_id, str(snippet))
         super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
         self.snip_id = snippet.snip_id
         self.snippet = snippet
@@ -48,8 +48,8 @@ class ConflictingSnipID(SnippetError):
     def __init__(self, snippet, incoming_snip_id):
         msg = ('Attempted to overwrite snip_id {} for snippet {} '
                '(conflict resolution strategy not provided while generating '
-               'snip_ids for committing to db)')
-            ).format(snippet.snip_id, str(snippet))
+               'snip_ids for committing to db)'
+              ).format(snippet.snip_id, str(snippet))
         super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
         self.snip_id = snippet.snip_id
         self.incoming_snip_id = incoming_snip_id
@@ -61,6 +61,6 @@ class TerminalSnippetError(SnippetError):
     def __init__(self, snippet, msg=None, hint=''):
         if msg is None:
             msg = ('Attempted invalid action on Terminal Snippet {}'
-                ).format(str(snippet), hint)
+                  ).format(str(snippet), hint)
         super(TerminalSnippetError, self).__init__(snippet, msg=msg)
         self.snippet = snippet

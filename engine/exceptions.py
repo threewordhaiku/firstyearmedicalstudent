@@ -22,10 +22,6 @@ class BadExpression(ChoiceError):
 
 
 
-
-
-
-
 class SnippetError(Exception):
     """Basic exception for errors raised by Snippets"""
     def __init__(self, snippet, msg=None):
@@ -36,21 +32,35 @@ class SnippetError(Exception):
         self.snippet = snippet
 
 
-class CannotRedefineSnipID(Exception):
-    """Attempted to redefine snip_id"""
+class CannotRedefineSnipID(SnippetError):
+    """Attempted to redefine snip_id in committed snippet"""
     def __init__(self, snippet):
-        msg = ('Attempted to overwrite {} for snippet {}'
+        msg = ('Attempted to overwrite snip_id {} for snippet {} '
+               '(has this snippet already been committed?)'
             ).format(snippet.snip_id, str(snippet))
         super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
-        self.snip_id = snip.snip_id
+        self.snip_id = snippet.snip_id
+        self.snippet = snippet
+
+
+class ConflictingSnipID(SnippetError):
+    """Attempted to redefine snip_id in uncommitted snippet"""
+    def __init__(self, snippet, incoming_snip_id):
+        msg = ('Attempted to overwrite snip_id {} for snippet {} '
+               '(conflict resolution strategy not provided while generating '
+               'snip_ids for committing to db)')
+            ).format(snippet.snip_id, str(snippet))
+        super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
+        self.snip_id = snippet.snip_id
+        self.incoming_snip_id = incoming_snip_id
         self.snippet = snippet
 
 
 class TerminalSnippetError(SnippetError):
-    """Attempted to extend a Terminal Snippet"""
-    def __init__(self, snippet, msg=None):
+    """Attempted to modify a Terminal Snippet unacceptably"""
+    def __init__(self, snippet, msg=None, hint=''):
         if msg is None:
-            msg = ('Attempted invalid action on Terminal Snippet'
-                ).format(str(snippet))
+            msg = ('Attempted invalid action on Terminal Snippet {}'
+                ).format(str(snippet), hint)
         super(TerminalSnippetError, self).__init__(snippet, msg=msg)
         self.snippet = snippet

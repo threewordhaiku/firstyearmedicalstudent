@@ -1,5 +1,7 @@
 from collections import OrderedDict
+
 from .exceptions import *
+from .compiler import compile_snippet
 
 
 class Choice():
@@ -85,6 +87,10 @@ class Choice():
             raise BadExpression(self, oper, msg)
 
 
+    def make_sql(self):
+        pass
+
+
     def __repr__(self):
         """Pretty-print Choice object"""
         fr = self.snippet.snip_id
@@ -97,12 +103,12 @@ class Choice():
 
 
 
-
 class Snippet():
     def __init__(self, text, **kwargs): 
         self.text = text
         self.choices = []
         self.snip_id = 'pending'
+        self.committed = False
 
         self.metadata = dict()
         # Copy metadata vars
@@ -112,15 +118,11 @@ class Snippet():
             self.metadata[key] = kwargs[key]
     
     
-    def requires_snip_id(func):
+    def ensure_has_snip_id(self):
         """Decorator for enforcing methods that require snip_id"""
-        def wrapper(*args, **kwargs):
-            self = args[0]
-            if self.snip_id == 'pending':
-                raise SnippetError("Unable to create SQL if Snippet does not "
-                                   "have a snid_id")
-            func(*args, **args)
-        return wrapper
+        if self.snip_id == 'pending':
+            raise SnippetError("Cannot proceed because Snippet does not "
+                               "have a snid_id")
 
 
     def set_text(self, text):
@@ -131,6 +133,10 @@ class Snippet():
         if self.snip_id is not 'pending':
             raise CannotRedefineSnipID(self)
         self.snip_id = snip_id
+
+
+    def get_assigned_snip_id(self):
+        return self.snip_id
 
 
     def add_choice(self, *args, **kwargs):
@@ -158,9 +164,13 @@ class Snippet():
         return self.child_snippets
 
 
-    @requires_snip_id
-    def make_sql(self):
-        pass
+    def make_insert_args(self, use_snip_id=None):
+        snip_id = int(use_snip_id) or self.snip_id
+        game_text = self.text
+        # http://initd.org/psycopg/docs/usage.html#passing-parameters-to-sql-queries
+        sql = """INSERT INTO snippets(snip_id, game_text) VALUES (%s %s)"""
+        data = (snip_id, game_text)
+        return sql, data
 
 
     def __repr__(self):
@@ -204,12 +214,9 @@ class RootSnippet(Snippet):
         super(RootSnippet, self).__init__(*args, **kwargs)
 
 
-    @Snippet.requires_snip_id
     def compile(self):
-        # children = self.get_child_snippets()
-        # for i, snip in enumerate(children):
-        #     snip.set_snip_id(self.snip + i + 1)
-        raise NotImplemented
+        self.ensure_has_snip_id()
+        compile_snippet(self)
 
 
     def __repr__(self):

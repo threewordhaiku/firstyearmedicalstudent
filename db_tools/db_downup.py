@@ -1,4 +1,4 @@
-from . import Cursor, DB_URL
+from . import AppCursor, DB_URL
 from sqlalchemy import create_engine
 import pandas as pd
 
@@ -12,7 +12,8 @@ def fetch_table(table_name):
     Returns:
         List of table headers and rows extracted from DictResult.
     """
-    with Cursor("SELECT * FROM {}".format(table_name)) as cur:
+    with AppCursor() as cur:
+        cur.execute("SELECT * FROM {}".format(table_name))
         return [[col.name for col in cur.description]] + [row for row in cur]
 
 
@@ -35,7 +36,7 @@ def download_table(table_name, csv_joinstr='|'):
 
     #Query DB for selected table via cursor
     sql = """SELECT * FROM {};""".format(table_name)
-    with Cursor() as cur:
+    with AppCursor() as cur:
         cur.execute(sql)
     
         #table headers
@@ -75,7 +76,7 @@ def upload_table(table_name, csv):
     
     #Insert Dataframe to sql
     #If table exists, drop it. Cascade option drops foreign key dependents.
-    with Cursor() as cur:
+    with AppCursor() as cur:
         cur.execute("DROP TABLE IF EXISTS {} CASCADE;".format(table_name))
 
     #Recreate table, and insert data. Create if does not exist.

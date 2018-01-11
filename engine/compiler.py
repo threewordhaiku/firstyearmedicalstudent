@@ -90,7 +90,6 @@ def fetch_rows_with_snipids(list_snip_ids):
     placeholders = ['%s'] * len(list_snip_ids)
     query = query.format(', '.join(placeholders))
     with AppCursor() as cur:
-        print('executing ', query[:40] + '...')
         cur.execute(query, list_snip_ids)
         rows = cur.fetchall()
     
@@ -104,10 +103,8 @@ def find_spare_snipids(startfrom, needed):
     free_ids = []
     found = 0
     while found < needed:
-        print('found:', found, '| needed:', needed)
         # Each loop defines a list of 100 candidate snip_ids
         candidate_snipids = list(range(startfrom, startfrom+100))
-        print('looking at candidate range', startfrom, 'to', startfrom+100)
 
         # fetch_rows_with_snipids() returns a dict of {row['snip_id']: row}
         # Fetch rows that contain any of our candidates
@@ -116,7 +113,6 @@ def find_spare_snipids(startfrom, needed):
             fetch_rows_with_snipids(candidate_snipids).items()
             if row is not None
         ]
-        print('existing_snip_ids:', existing_snip_ids)
 
         # If none of the candidates exist in the db:
         if not existing_snip_ids:

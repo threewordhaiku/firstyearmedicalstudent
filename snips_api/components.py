@@ -106,10 +106,10 @@ class Choice():
 
 
 class Snippet():
-    def __init__(self, text, **kwargs): 
+    def __init__(self, text, snip_id=None, **kwargs): 
         self.text = text
         self.choices = []
-        self.snip_id = 'pending'
+        self.snip_id = snip_id or 'pending'
         self.committed = False
 
         self.metadata = dict()
@@ -217,13 +217,8 @@ class TerminalSnippet(Snippet):
 
 class RootSnippet(Snippet):
     """Special Snippet class denoting start of a chain of Snippets"""
-    def __init__(self, *args, **kwargs):
-        super(RootSnippet, self).__init__(*args, **kwargs)
-
-
-    def compile(self):
-        self.ensure_has_snip_id()
-        compile_snippet(self)
+    def __init__(self, text, snip_id, *args, **kwargs):
+        super(RootSnippet, self).__init__(text, snip_id, *args, **kwargs)
 
 
     def __repr__(self):

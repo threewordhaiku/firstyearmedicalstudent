@@ -1,0 +1,137 @@
+>>> from engine.components import *  #doctest: +ELLIPSIS
+Using database at ec2-54-227-250-33.compute-1.amazonaws.com
+>>>
+>>> s_start = RootSnippet('"Okay, last question. If a runaway train is bearing down--"')
+>>> s_start.set_snip_id(9000)
+>>> s_nointerrupt = Snippet('"--well, actually, I think you know the rest of it. What do you think?"')
+>>> s_nointerrupt2 = Snippet('"Hmm, I see. Alright, that\'s all for today. Thanks for coming down."')
+>>> s_interrupted = Snippet('"Oh. I see. Well then, I think that\'s all for today."')
+>>> end = TerminalSnippet('That was a strange interview...')
+>>>
+>>>
+>>> s_start.add_choice(
+...     "(You've heard this one before...)",
+...     next_snippet=s_nointerrupt)
+<Choice from 9000 to pending: (You've heard thi...>
+>>>
+>>> s_nointerrupt.add_choice(
+...     "I won't do anything",
+...     next_snippet=s_nointerrupt2).add_modifies_flag('tut_switch_track = 0')
+>>> s_nointerrupt.add_choice(
+...     "I'd switch the tracks",
+...     next_snippet=s_nointerrupt2).add_modifies_flag('tut_switch_track = 1')
+>>>
+>>> s_nointerrupt2.add_choice(
+...     '(Leave)',
+...     next_snippet=end)
+<Choice from pending to pending: (Leave)>
+>>>
+>>>
+>>> c_interrupt = s_start.add_choice(
+...     "I won\'t do anything.",
+...     next_snippet=s_interrupted)
+>>>
+>>> c_interrupt.add_check_flag(
+...     'skin_thickness >= 5')
+>>> c_interrupt.add_modifies_flag(
+...     'tut_board_annoyed += 1')
+>>> c_interrupt.add_modifies_flag(
+...     'tut_switch_track = 0')
+>>>
+>>> s_interrupted.add_choice(
+...     '(Leave)',
+...     next_snippet=end)
+<Choice from pending to pending: (Leave)>
+>>>
+>>> snips = [
+...     s_start,
+...     s_nointerrupt,
+...     s_nointerrupt2,
+...     s_interrupted,
+...     end
+... ]
+>>>
+>>> root = snips[0]
+>>> for sql, data in root.generate_chain_sql():
+...     print('::::', sql)
+...     print('  ' + '\n  '.join(str(x) for x in data))
+...     print()
+...
+:::: INSERT INTO snippets(snip_id, game_text) VALUES (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s)
+  "--well, actually, I think you know the rest of it. What do you think?"
+  9001
+  "Oh. I see. Well then, I think that's all for today."
+  9002
+  "Hmm, I see. Alright, that's all for today. Thanks for coming down."
+  9003
+  That was a strange interview...
+  9004
+  "Okay, last question. If a runaway train is bearing down--"
+  9000
+<BLANKLINE>
+:::: INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  (You've heard this one before...)
+  9000
+  9001
+  None
+  None
+  None
+  None
+  None
+  None
+<BLANKLINE>
+:::: INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  I won't do anything.
+  9000
+  9002
+  tut_board_annoyed += 1
+  tut_switch_track = 0
+  None
+  skin_thickness >= 5
+  None
+  None
+<BLANKLINE>
+:::: INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  I won't do anything
+  9001
+  9003
+  tut_switch_track = 0
+  None
+  None
+  None
+  None
+  None
+<BLANKLINE>
+:::: INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  I'd switch the tracks
+  9001
+  9003
+  tut_switch_track = 1
+  None
+  None
+  None
+  None
+  None
+<BLANKLINE>
+:::: INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  (Leave)
+  9002
+  9004
+  None
+  None
+  None
+  None
+  None
+  None
+<BLANKLINE>
+:::: INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  (Leave)
+  9003
+  9004
+  None
+  None
+  None
+  None
+  None
+  None
+<BLANKLINE>

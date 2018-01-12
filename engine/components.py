@@ -18,17 +18,19 @@ class Choice():
     
 
     def add_check_flag(self, expression):
-        flag_name, operator, value = self.parse_expression(expression)
+        expr = self.parse_expression(expression)
         self.check_flags.append(
-            (flag_name, operator, value)
+            #' '.join((flag_name, operator, value))
+            expr
         )
 
 
     def add_modifies_flag(self, expression):
-        flag_name, operator, value = self.parse_expression(expression, 
+        expr = self.parse_expression(expression, 
             use_symbols='assignment')
         self.modifies_flags.append(
-            (flag_name, operator, value)
+            #' '.join((flag_name, operator, value))
+            expr
         )
 
 
@@ -53,7 +55,7 @@ class Choice():
         except:
             #raise BadExpression(self, str(expr))
             raise
-        return flag_name, operator, value
+        return ' '.join(str(x) for x in [flag_name, operator, value])
 
 
     def ensure_valid_flag_name(self, flag_name): 
@@ -94,11 +96,11 @@ class Choice():
     def __repr__(self):
         """Pretty-print Choice object"""
         fr = self.snippet.snip_id
-        to = self.next_snippet
+        to = self.next_snippet.snip_id
         label = self.label
         if len(label) > 20:
             label = label[:17] + '...'
-        m = '<Choice {fr}~{to}: {label}>'
+        m = '<Choice from {fr} to {to}: {label}>'
         return m.format(**locals())
 
 
@@ -146,8 +148,8 @@ class Snippet():
         return c
 
 
-    def get_child_snippets(self):
-        """Gets all 'downstream' Snippets connected to this one"""
+    def get_snippets_tree(self):
+        """Gets all reachable snippets, including this one"""
         if getattr(self, 'child_snippets', None):
             return self.child_snippets
         unwalked = [self]
@@ -174,8 +176,8 @@ class Snippet():
 
 
     def generate_chain_sql(self):
-        query, data = snippet_chain_to_sql_data(self)
-        return query, data
+        for query, data in snippet_chain_to_sql_data(self):
+            yield query, data
 
 
     def __repr__(self):
@@ -184,7 +186,7 @@ class Snippet():
         text = self.text
         if len(text) > 20:
             text = text[:17] + '...'
-        m = '<Snippet id-{snip_id}: {text}>'
+        m = '<Snippet id {snip_id}: {text}>'
         return m.format(**locals())
 
 
@@ -208,7 +210,7 @@ class TerminalSnippet(Snippet):
         text = self.text
         if len(text) > 20:
             text = text[:17] + '...'
-        m = '<TerminalSnippet id-{snip_id}: {text}>'
+        m = '<TerminalSnippet id {snip_id}: {text}>'
         return m.format(**locals())
 
 
@@ -230,6 +232,6 @@ class RootSnippet(Snippet):
         text = self.text
         if len(text) > 20:
             text = text[:17] + '...'
-        m = '<RootSnippet id-{snip_id}: {text}>'
+        m = '<RootSnippet id {snip_id}: {text}>'
         return m.format(**locals())
 

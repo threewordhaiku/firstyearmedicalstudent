@@ -1,5 +1,5 @@
 >>> from engine.components import *  #doctest: +ELLIPSIS
-Using database at ec2-54-227-250-33.compute-1.amazonaws.com
+Using database at ...
 >>>
 >>> s_start = RootSnippet('"Okay, last question. If a runaway train is bearing down--"')
 >>> s_start.set_snip_id(9000)

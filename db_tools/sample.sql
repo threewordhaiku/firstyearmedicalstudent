@@ -25,34 +25,24 @@ VALUES
 INSERT INTO
     choices(
         choice_label, snip_id, next_snip_id,
-        set_flg_1, set_val_1,
-        set_flg_2, set_val_2,
-        check_flg_1, check_opr_1, check_val_1,
-        check_flg_2, check_opr_2, check_val_2
+        mod_flg_1, mod_flg_2, mod_flg_3, 
+        check_flg_1, check_flg_2, check_flg_3,
     )
 VALUES
     (
         'How are you feeling?', 4, 5,
-        null, null, 
-        null, null,
-        null, null, null, 
+        null, null, null,
         null, null, null
     ), (
         'You look great today.', 4, 6,
-        'bm_patient', 1,
-        null, null,
-        null, null, null,
+        'bm_patient += 1', null, null,
         null, null, null
     ), (
         'You look wonderful!', 6, 7,
-        'bm_patient', 2,
-        null, null,
-        null, null, null,
+        'bm_patient += 1', null, null
         null, null, null
     ), (
         'How are you feeling?', 6, 5,
-        null, null,
-        null, null,
         null, null, null,
         null, null, null
     );

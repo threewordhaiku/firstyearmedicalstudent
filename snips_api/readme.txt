@@ -62,15 +62,14 @@ with AppCursor() as cur:
 // the base snips_api module.
 
 class snips_api.components.Snippet(text, snip_id=None)
-  The Snippet is the basic component to contain the primary game text that 
-  carries the main plot of the game. Each Snippet minimally contains game text 
-  and a snip_id. The snip_id uniquely identifies it to other components in the 
-  game, such as [Choices](#snips_api.components.choice), which are created 
-  with the Snippet.add_choice() method.
+  The Snippet is a basic container to hold the primary game text that carries
+  the main plot of the game. Each Snippet minimally contains game text and a
+  snip_id. The snip_id uniquely identifies it to other components in the game,
+  such as Choices, which are created using Snippet.add_choice().
 
   Args:
-    text -- Game text. Commits into database under the `game_text` column in
-            the `snippets` table.
+    text    -- Game text. Commits into database under the `game_text` column in
+               the `snippets` table.
     snip_id -- Unique integer snip_id that identifies the snippet to other 
                game components. Compulsory for first snippet, if committing 
                snippets to database.

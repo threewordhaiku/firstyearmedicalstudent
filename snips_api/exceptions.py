@@ -64,3 +64,26 @@ class TerminalSnippetError(SnippetError):
                   ).format(str(snippet), hint)
         super(TerminalSnippetError, self).__init__(snippet, msg=msg)
         self.snippet = snippet
+
+
+
+class CompilerError(Exception):
+    """Basic exception for errors raised by Snippets"""
+    def __init__(self, hint=None):
+        if hint is None:
+            hint = ("An error occured while compiling snippets into the "
+                    "database. No changes were committed.")
+        super(CompilerError, self).__init__(hint)
+
+
+class TimidError(CompilerError):
+    """Basic exception for errors raised by Snippets"""
+    def __init__(self, snip_id, hint=None):
+        if hint is None:
+            hint = ('snip_id {} already exists in the database, "timid" '
+                    'insert method aborted'.format(
+                        snip_id
+                   ))
+        super(TimidError, self).__init__(hint)
+
+

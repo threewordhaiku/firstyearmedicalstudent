@@ -7,7 +7,7 @@ from itertools import zip_longest
 def snippet_chain_to_sql_data(snip, insert_method='timid'):
     try:
         int(snip.snip_id)
-    except TypeError:
+    except ValueError:
         raise CompilerError('The provided snippet has invalid snip_id '
                             '(expected int, got {})'.format(str(snip.snip_id))
                            )
@@ -21,10 +21,15 @@ def snippet_chain_to_sql_data(snip, insert_method='timid'):
     # Assign snip_ids to snippets
     # Snippets with valid int(snippet.snip_id) will use that snip_id
     # Snippets with pending snip_id will be assigned an unused on in the db
-    dict_snip_to_id = assign_ids(snips, insert_method)
+    dict_snip_to_id, ids_to_drop = assign_ids(snips, insert_method)
+
+    drop_query = """DELETE FROM snippets WHERE snip_id in ({})""".format(
+        make_placeholders_for(ids_to_drop))
 
     # output is a list of (query, data) tuples
     output = []
+    if ids_to_drop:
+        output.append((drop_query, ids_to_drop))
     output.append(generate_sql_for_snippets(snips, dict_snip_to_id))
     for query, data in generate_sql_for_choices(snips, dict_snip_to_id):
         output.append((query, data))
@@ -33,7 +38,7 @@ def snippet_chain_to_sql_data(snip, insert_method='timid'):
 
 
 def assign_ids(snips, insert_method):
-    """Matches snippets with target rows in database"""
+    """Matches snippets with spare snip_ids and identifies snip_ids to drop"""
     # Complain if first snippet has no snip_id to count up from
     try:
         root_id = int(snips[0].snip_id)
@@ -58,17 +63,18 @@ def assign_ids(snips, insert_method):
         else:
             pending_snip_id.append(snip)
     
-    # Complain if encountering resistance when timidly inserting
-    if insert_method == 'timid':
-        # Fetch rows that contain snip_ids in declared_snip_id
-        for row in fetch_rows_with_snipids(
-            [snippet.snip_id for snippet in declared_snip_id]
-        ).values():
-            # If rows exist, timidly abort
-            if row:
-                raise CompilerError('snip_id {} already exists in the '
-                                    'database, "timid" insert method aborted'
-                                   ).format(row['snip_id'])
+    drop_snip_ids = []
+    # Fetch rows that contain snip_ids in declared_snip_id
+    for row in fetch_rows_with_snipids(
+        [snippet.snip_id for snippet in declared_snip_id]
+    ).values():
+        if row:
+            exiting_snip_id = row['snip_id']
+            # Complain if encountering resistance when timidly inserting
+            if insert_method == 'timid':
+                raise TimidError(exiting_snip_id)
+            elif insert_method == 'rough':
+                drop_snip_ids.append(exiting_snip_id)
 
     # If using rough insert, it doesn't matter if rows already exist among
     # the declared snip_ids, because we will overwrite those rows.
@@ -88,7 +94,7 @@ def assign_ids(snips, insert_method):
 
     # SAN check
     assert(len(snips) == len(output))
-    return output
+    return output, drop_snip_ids
 
 
 def fetch_rows_with_snipids(list_snip_ids):
@@ -98,9 +104,8 @@ def fetch_rows_with_snipids(list_snip_ids):
     """
     output = {snip_id: None for snip_id in list_snip_ids}
     
-    query = """SELECT * FROM snippets WHERE snip_id IN ({})"""
-    placeholders = ['%s'] * len(list_snip_ids)
-    query = query.format(', '.join(placeholders))
+    query = """SELECT * FROM snippets WHERE snip_id IN ({})""".format(
+        make_placeholders_for(list_snip_ids))
     with AppCursor() as cur:
         cur.execute(query, list_snip_ids)
         rows = cur.fetchall()
@@ -162,9 +167,8 @@ def generate_sql_for_snippets(snips, dict_snip_to_id):
     # `placeholders` is a list of n copies of '(%s, %s)' where n = len(snips)
     # They are placeholders for actual values that are merged into the query
     # when the query is executed to the database via psycopg2
-    placeholders = ['(%s, %s)'] * len(snips)
-    sql = """INSERT INTO snippets(snip_id, game_text) VALUES """
-    sql += ', '.join(placeholders)
+    sql = """INSERT INTO snippets(snip_id, game_text) VALUES {}""".format(
+        make_placeholders_for(snips, using='(%s, %s)'))
     
     # `values` is a flat (non-nested) list of values to merge into sql
     values = []
@@ -193,17 +197,17 @@ def generate_sql_for_choices(snips, dict_snip_to_id):
     for choice_dict in choices_data:
         # `cols` is a string containing table columns to insert to
         cols = ', '.join(choice_dict.keys())
-        # `placeholders` string with n copies of "%s" joined by ", "
-        # where n = len(choice_dict.keys())
-        placeholder = ', '.join(['%s'] * len(choice_dict.keys()))
-
-        sql = """INSERT INTO choices({}) VALUES ({})"""
-        sql = sql.format(cols, placeholder)
+        sql = """INSERT INTO choices({}) VALUES ({})""".format(
+            cols, make_placeholders_for(choice_dict.keys()))
         
         data = choice_dict.values()
         output.append((sql, data))
 
     return output
+
+
+def make_placeholders_for(iterable, using='%s'):
+    return ', '.join([using] * len(iterable))
 
 
 def extract_col_data_from_choice(choice, dict_snip_to_id):
@@ -247,12 +251,3 @@ def extract_col_data_from_choice(choice, dict_snip_to_id):
             output[column] = expr
     return output
 
-
-
-class CompilerError(Exception):
-    """Basic exception for errors raised by Snippets"""
-    def __init__(self, hint=None):
-        if hint is None:
-            hint = ("An error occured while compiling snippets into the "
-                    "database. No changes were committed.")
-        super(SnippetError, self).__init__(hint)

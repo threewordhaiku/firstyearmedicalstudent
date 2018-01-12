@@ -1,7 +1,6 @@
 from collections import OrderedDict
 
 from .exceptions import *
-from .compiler import snippet_chain_to_sql_data
 
 
 class Choice():
@@ -106,39 +105,16 @@ class Choice():
 
 
 class Snippet():
-    def __init__(self, text, snip_id=None, **kwargs): 
+    def __init__(self, text, snip_id=None): 
         self.text = text
         self.choices = []
         self.snip_id = snip_id or 'pending'
-        self.committed = False
-
-        self.metadata = dict()
-        # Copy metadata vars
-        for key in ['author', 'description']:
-            if key not in kwargs:
-                continue
-            self.metadata[key] = kwargs[key]
-    
-    
-    def ensure_has_snip_id(self):
-        """Decorator for enforcing methods that require snip_id"""
-        if self.snip_id == 'pending':
-            raise SnippetError("Cannot proceed because Snippet does not "
-                               "have a snid_id")
-
-
-    def set_text(self, text):
-        self.text = text
 
 
     def set_snip_id(self, snip_id):
         if self.snip_id is not 'pending':
             raise CannotRedefineSnipID(self)
         self.snip_id = snip_id
-
-
-    def get_assigned_snip_id(self):
-        return self.snip_id
 
 
     def add_choice(self, *args, **kwargs):
@@ -167,7 +143,13 @@ class Snippet():
 
 
     def make_insert_args(self, use_snip_id=None):
-        snip_id = int(use_snip_id) or self.snip_id
+        snip_id = use_snip_id or self.snip_id
+        try:
+            int(snip_id)
+        except ValueError:
+            SnippetError('Bad argument for snip_id '
+                         '(expecting type int, got {}'.format(repr(snip_id))
+                        )
         game_text = self.text
         # http://initd.org/psycopg/docs/usage.html#passing-parameters-to-sql-queries
         sql = """INSERT INTO snippets(snip_id, game_text) VALUES (%s %s)"""
@@ -175,8 +157,9 @@ class Snippet():
         return sql, data
 
 
-    def generate_chain_sql(self):
-        for query, data in snippet_chain_to_sql_data(self):
+    def generate_chain_sql(self, insert_method='timid'):
+        from .compiler import snippet_chain_to_sql_data
+        for query, data in snippet_chain_to_sql_data(self, insert_method):
             yield query, data
 
 
@@ -218,7 +201,12 @@ class TerminalSnippet(Snippet):
 class RootSnippet(Snippet):
     """Special Snippet class denoting start of a chain of Snippets"""
     def __init__(self, text, snip_id, *args, **kwargs):
-        super(RootSnippet, self).__init__(text, snip_id, *args, **kwargs)
+        try:
+            super(RootSnippet, self).__init__(text, int(snip_id), *args, **kwargs)
+        except ValueError:
+            msg = 'Bad snip_id provided (expected int, got: {})'.format(
+                repr(snip_id))
+            raise SnippetError(self, msg=msg)
 
 
     def __repr__(self):

@@ -26,7 +26,7 @@ INSERT INTO
     choices(
         choice_label, snip_id, next_snip_id,
         mod_flg_1, mod_flg_2, mod_flg_3, 
-        check_flg_1, check_flg_2, check_flg_3,
+        check_flg_1, check_flg_2, check_flg_3
     )
 VALUES
     (

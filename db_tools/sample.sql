@@ -39,7 +39,7 @@ VALUES
         null, null, null
     ), (
         'You look wonderful!', 6, 7,
-        'bm_patient += 1', null, null
+        'bm_patient += 1', null, null,
         null, null, null
     ), (
         'How are you feeling?', 6, 5,

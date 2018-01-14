@@ -7,19 +7,41 @@
     <meta name="author" content="Nigirite">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
+    <!--
     <title>You are a first-year medical student</title>
 
     <script src="{{ url_for('static', filename='jquery.js') }}"></script>
     
-    <!-- Page scripts -->
+    <- Page scripts ->
     {% block head %}
     {% endblock %}
     
-    <!-- Bootstrap core CSS -->
+    <- Bootstrap core CSS ->
     <link href="{{ url_for('static', filename='bootstrap.min.css') }} " rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <- Custom styles for this template ->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"> 
+
+            <-remove this later -->
+            <title>You are a first-year medical student</title>
+
+            <script src="../static/jquery.js"></script>
+            <script src="../static/style.js"></script>
+            
+            <!-- Page scripts -->
+            <script src="../static/main_page.js"></script>
+
+            <style>
+              .startmenu {
+                display: inline;
+              }
+            </style>
+
+            <!-- Bootstrap core CSS -->
+            <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+            <!-- Custom styles for this template -->
+            <link href="../static/style.css" rel="stylesheet">
   </head>
 
   <body>
@@ -28,6 +50,14 @@
 
       {% block content %}
       {% endblock %}
+
+      <!--Settings Screen -->
+      <div id="settings_screen">
+        <!-- Back Button -->
+        <a href="#" class="cancel_button">&times;</a>
+      </div>
+      <!-- Shaded Overlay -->
+      <div id="cover"></div>
 
     </main><!-- /.container -->
 
@@ -43,6 +73,12 @@
           </li>
           <li class="nav-item active">
               <a class="nav-link text-muted debugging" href="{{ url_for('debug_database') }}" >Database</a>
+          </li>
+          <li class="nav-item active">
+            <!-- Settings Button -->
+            <div class="settingsbtn">
+            <a href="#settings_screen">Settings</a>
+            </div>              
           </li>
         </ul>
       </div>

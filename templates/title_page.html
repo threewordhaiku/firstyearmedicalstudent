@@ -1,39 +1,76 @@
-{% extends "index.html" %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Project Nigirite">
+    <meta name="author" content="Nigirite">
+    <link rel="icon" href="https://myanimelist.cdn-dena.com/r/360x360/images/characters/11/242945.jpg?s=1525e676b23f4e391bfbfe5dc88b0b8b">
 
-{% block head %}
-    <script src="{{ url_for('static', filename='main_page.js') }}"></script>
+    <title>You are a first-year medical student</title>
+
+    <script src="../static/jquery.js"></script>
+    <script src="../static/style.js"></script>
+    
+    <!-- Page scripts -->
+    <script src="../static/main_page.js"></script>
 
     <style>
       .startmenu {
         display: inline;
       }
     </style>
-{% endblock %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/style.css" rel="stylesheet">
+  </head>
 
 
-{% block content %}
+  <body>
+    <main role="main" class="container">
       <div class="template">
         <h2>
           You are a first-year<br />
           medical student.
         </h2>
         <hr />
-
+        
+        <!-- Start Menu Button -->
         <div class="startmenu">
           <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB">New</button>
           <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB">Load</button>
         </div>
+
+        <!-- Settings Button -->
         <div class="settings">
-          <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB">New</button>
+          <a href="#settings_screen"><button type="button" class="btn btn-outline-secondary btn-sm rounded-0 settingsbtn">Settings</button></a>
+         
+          <div id="settings_screen">
+            <!-- Back Button -->
+            <a href="#" class="cancel">&times;</a>
+            <!-- Embeded Settings Page -->
+            <div class="settingspage">
+              <iframe src="bad_end.html" scrolling="yes"></iframe>
+            </div>
+          </div>
+
+          <!-- Shaded Overlay -->
+          <div id="cover"></div>
         </div>
       </div>
 
-      <div class="container text-justify game-content">
+      <!-- Starting Desc. -->
+      <div class="container text-center game-content">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lobortis nisl mollis turpis finibus, in faucibus elit convallis. Nam bibendum ullamcorper orci, at ultrices leo gravida id. Phasellus a elit non dui malesuada posuere eu vitae risus. Sed pretium ac nisi quis malesuada. Vivamus eleifend facilisis purus vitae ultricies. Integer elementum tincidunt augue id aliquam. Fusce et leo dolor. Proin nec orci magna. Phasellus suscipit mattis ante at porta.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
         <p>
-          Donec eget orci lacinia, maximus metus sit amet, hendrerit ligula. Donec sed tempus turpis, eu imperdiet tellus. Sed sed cursus orci, vel suscipit mi. Maecenas pellentesque, augue eget placerat iaculis, felis purus pretium lectus, ac elementum dui libero egestas nunc. Etiam et luctus dolor. Curabitur vitae vehicula nulla. Maecenas eget iaculis tellus. Sed suscipit auctor dui sed accumsan. Nulla ut gravida magna.
+          Donec eget orci lacinia, maximus metus sit amet, hendrerit ligula.
         </p>
+        <p></p>
+        <a href="bad_end.html"><button type="button" class="btn btn-main rounded-0 startbtn"><span>Start</span></button></a>
       </div>
-{% endblock %}
+    </main>

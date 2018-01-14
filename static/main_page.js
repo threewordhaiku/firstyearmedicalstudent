@@ -5,6 +5,22 @@ $(document).ready(function() {
             "margin": "1rem"
         });
         $(".startmenu").fadeOut();
+        $(".settings").fadeOut();
         $(".game-content").fadeIn()
     });
-});
+
+    $(".settingsbtn").click(function() {
+   		$("a[rel]").overlay({
+        mask: 'darkred',
+        effect: 'apple',
+
+        onBeforeLoad: function() {
+            // grab wrapper element inside content
+            var wrap = this.getOverlay().find(".contentWrap");
+            // load the page specified in the trigger
+            wrap.load(this.getTrigger().attr("href"));
+        }
+ 
+    	});
+	});
+ })

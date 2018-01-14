@@ -29,7 +29,7 @@
             <script src="../static/style.js"></script>
             
             <!-- Page scripts -->
-            <script src="../static/main_page.js"></script>
+            <script src="../static/settings.js"></script>
 
             <style>
               .startmenu {
@@ -55,6 +55,27 @@
       <div id="settings_screen">
         <!-- Back Button -->
         <a href="#" class="cancel_button">&times;</a>
+        <!-- Settings and stuff -->
+        <div class="settings">
+          <h4>Settings</h4>
+          <p><strong>Master Volume: 
+            <span class= "slider_value" id="master_volume_value" style="color:black;font-weight:bold;">50</span>
+          </strong></p>
+          <input type="range" min="0" max="100" class="slider" id="master_volume" onchange="show_value(this.value,'master_volume_value')">
+          <p></p>
+
+          <p><strong>SFX: 
+            <span class= "slider_value" id="sfx_value" style="color:black;font-weight:bold;">50</span>
+          </strong></p>
+          <input type="range" min="0" max="100" class="slider" id="sfx" onchange="show_value(this.value,'sfx_value')">
+          <p></p>
+
+          <p><strong>BGM: 
+            <span class= "slider_value" id="bgm_value" style="color:black;font-weight:bold;">50</span>
+          </strong></p>
+          <input type="range" min="0" max="100" class="slider" id="bgm" onchange="show_value(this.value,'bgm_value')">
+          <p></p>
+        </div>
       </div>
       <!-- Shaded Overlay -->
       <div id="cover"></div>

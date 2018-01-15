@@ -272,25 +272,10 @@ body {
 
 input[type=text], select {
     width: 100%;
-    padding: 12px 20px;
+    padding: 8px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
-    border-radius: none;
+    border-radius: none; 
     box-sizing: border-box;
-}
-
-input[type=submit] {
-    width: 100%;
-    background-color: #C9C9C9;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: none;
-    cursor: pointer;
-}
-
-input[type=submit]:hover {
-    background-color: #ACACAC;
 }

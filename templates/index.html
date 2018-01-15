@@ -29,7 +29,9 @@
             <script src="../static/style.js"></script>
             
             <!-- Page scripts -->
-            <script src="../static/settings.js"></script>
+             <script src="../static/settings.js"></script>
+             <script src="http://code.jquery.com/jquery-1.8.3.js"></script> 
+             <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 
             <style>
               .startmenu {
@@ -42,6 +44,7 @@
 
             <!-- Custom styles for this template -->
             <link href="../static/style.css" rel="stylesheet">
+            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
   </head>
 
   <body>
@@ -59,26 +62,48 @@
         <div class="settings">
           <h4>Settings</h4>
 
-          <p><strong>Master Volume: 
-            <input type="button" value="-" onClick="subtract_one()">
-            <span class= "slider_value" id="master_volume_value" style="color:black;font-weight:bold;">50</span>
-            <input type="button" value="+" onClick="add_one(1,'master_volume_value')">
-          </strong></p>   
+          <div> <!-- Master Volume -->
+            <!-- Label and Buttons -->
+            <div>       
+              <strong>Master Volume:&nbsp</strong>
+              <input type="button" value="-" id="minus_mastervol" class="plusminusbtn">
+              <span class= "slider_value" name= "master_volume_value" id="master_volume_value" style="color:black;font-weight:bold;">50</span>
+              <input type="button" value="+" id="plus_mastervol" class="plusminusbtn">
+            </div>
+            <!-- Slider -->
+            <p></p>
+            <div id="master_volume" ></div>
+            <br />
+          </div>  
 
-          <input type="range" min="0" max="100" class="slider" id="master_volume" onchange="show_value(this.value,'master_volume_value')" >
-          <p></p>
+          <div> <!-- SFX Volume -->
+            <!-- Label and Buttons -->
+            <div>       
+              <strong>SFX Volume:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong>
+              <input type="button" value="-" id="minus_sfxvol" class="plusminusbtn">
+              <span class= "slider_value" name= "sfx_volume_value" id="sfx_volume_value" style="color:black;font-weight:bold;">50</span>
+              <input type="button" value="+" id="plus_sfxvol" class="plusminusbtn">
+            </div>
+            <!-- Slider -->
+            <p></p>
+            <div id="sfx_volume" ></div>
+            <br />
+          </div> 
 
-          <p><strong>SFX: 
-            <span class= "slider_value" id="sfx_value" style="color:black;font-weight:bold;">50</span>
-          </strong></p>
-          <input type="range" min="0" max="100" class="slider" id="sfx" onchange="show_value(this.value,'sfx_value')">
-          <p></p>
+          <div> <!-- BGM Volume -->
+            <!-- Label and Buttons -->
+            <div>       
+              <strong>BGM Volume:&nbsp&nbsp&nbsp&nbsp</strong>
+              <input type="button" value="-" id="minus_bgmvol" class="plusminusbtn">
+              <span class= "slider_value" name= "bgm_volume_value" id="bgm_volume_value" style="color:black;font-weight:bold;">50</span>
+              <input type="button" value="+" id="plus_bgmvol" class="plusminusbtn">
+            </div>
+            <!-- Slider -->
+            <p></p>
+            <div id="bgm_volume" ></div>
+            <br />
+          </div> 
 
-          <p><strong>BGM: 
-            <span class= "slider_value" id="bgm_value" style="color:black;font-weight:bold;">50</span>
-          </strong></p>
-          <input type="range" min="0" max="100" class="slider" id="bgm" onchange="show_value(this.value,'bgm_value')">
-          <p></p>
         </div>
       </div>
       <!-- Shaded Overlay -->

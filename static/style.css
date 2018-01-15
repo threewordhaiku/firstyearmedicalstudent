@@ -97,11 +97,31 @@ a:hover{
     cursor: pointer;
 }
 
+.ui-slider .ui-slider-handle{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius:50%;
+    background: #000;
+    cursor: pointer;
+}
+
 .slider_value{
-  background: #B2B2B2;
+  background: #C9C9C9;
   border-color:#000;
   border: 1px solid;
   padding: 0px 10px;
+}
+
+.plusminusbtn{
+  border:none;
+  //background-color: #FFF;
+  //border:1px solid;
+  //border-radius:10%;
+  width:25px;
+  height:23px;
+  text-align: center;
 }
 /*<< Setting Screen Classes */
 

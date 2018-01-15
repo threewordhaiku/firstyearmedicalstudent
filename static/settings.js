@@ -1,3 +1,12 @@
+/*Settings Button Toggle Function*/
+$(document).ready(function(){
+  
+    $("#settings_toggle").click(function(){
+        $("#settings_screen").toggle();
+        $("#cover").toggle();
+    });
+});
+
 /*Settings Menu Fuctions*/
 
 /* Master Volume Functions */

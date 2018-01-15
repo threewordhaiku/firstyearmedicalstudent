@@ -30,8 +30,7 @@
             
             <!-- Page scripts -->
              <script src="../static/settings.js"></script>
-             <script src="http://code.jquery.com/jquery-1.8.3.js"></script> 
-             <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+             <script src="../static/jquery-ui.js"></script>
 
             <style>
               .startmenu {
@@ -44,7 +43,7 @@
 
             <!-- Custom styles for this template -->
             <link href="../static/style.css" rel="stylesheet">
-            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+            <link href="../static/jquery-ui.css" rel="stylesheet">
   </head>
 
   <body>
@@ -127,7 +126,7 @@
           <li class="nav-item active">
             <!-- Settings Button -->
             <div class="settingsbtn">
-            <a href="#settings_screen">Settings</a>
+            <a href="#settings_screen" id="settings_toggle" class="settings_toggle">Settings</a>
             </div>              
           </li>
         </ul>

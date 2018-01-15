@@ -21,18 +21,14 @@ CREATE TABLE "choices" (
     snip_id int not null,
     next_snip_id int not null,
     
-    set_flg_1 text,
-    set_val_1 int,
-    set_flg_2 text,
-    set_val_2 int,
+    mod_flg_1 text,
+    mod_flg_2 text,
+    mod_flg_3 text,
 
     check_flg_1 text,
-    check_opr_1 text,
-    check_val_1 int,
     check_flg_2 text,
-    check_opr_2 text,
-    check_val_2 int,
-
+    check_flg_3 text,
+    
     FOREIGN KEY (snip_id) REFERENCES snippets(snip_id),
     FOREIGN KEY (next_snip_id) REFERENCES snippets(snip_id)
 );

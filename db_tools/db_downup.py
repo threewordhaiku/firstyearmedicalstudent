@@ -1,4 +1,4 @@
-from . import Cursor, DB_URL
+from . import AppCursor, DB_URL
 from sqlalchemy import create_engine
 import pandas as pd
 
@@ -7,12 +7,13 @@ def fetch_table(table_name):
     """Fetches all rows from the given table_name
 
     Args:
-        table_name: Name of the table to download as a string.
+        table_name: Name of the table to fetch from.
 
     Returns:
-        DictCursor containing query results.
+        List of table headers and rows extracted from DictResult.
     """
-    with Cursor("SELECT * FROM {}".format(table_name)) as cur:
+    with AppCursor() as cur:
+        cur.execute("SELECT * FROM {}".format(table_name))
         return [[col.name for col in cur.description]] + [row for row in cur]
 
 
@@ -26,7 +27,8 @@ def download_table(table_name, csv_joinstr='|'):
                      Default: '|' (single pipe)
     
     Returns:
-        String ready to be dumped into a CSV file
+        String ready to be dumped into a CSV file.
+        First line of string contains table headers.
     """
     #Create a list to store table values, including table name and headers
     #table name
@@ -34,12 +36,11 @@ def download_table(table_name, csv_joinstr='|'):
 
     #Query DB for selected table via cursor
     sql = """SELECT * FROM {};""".format(table_name)
-    with Cursor() as cur:
+    with AppCursor() as cur:
         cur.execute(sql)
     
         #table headers
         table_heads = [col.name for col in cur.description]
-        print(table_heads, 'list len', len(table_heads))
         output_strs.append(
             csv_joinstr.join(table_heads)
         )
@@ -69,11 +70,12 @@ def upload_table(table_name, csv):
     #Create a connection to the database
     engine = create_engine(DB_URL)
     #Reads the csv file to a pandas dataframe
-    csv_data = pd.read_csv(csv, delimiter='|')
+    #Skip first 2 rows; they are table name and header row
+    csv_data = pd.read_csv(csv, delimiter='|', skiprows=2)
     
     #Insert Dataframe to sql
     #If table exists, drop it. Cascade option drops foreign key dependents.
-    with Cursor() as cur:
+    with AppCursor() as cur:
         cur.execute("DROP TABLE IF EXISTS {} CASCADE;".format(table_name))
 
     #Recreate table, and insert data. Create if does not exist.

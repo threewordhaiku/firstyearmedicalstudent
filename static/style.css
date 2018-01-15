@@ -22,7 +22,8 @@ a:hover{
   margin: 3rem;
 }
 
-/*Setting Screen Classes >>*/
+/*Setting Screen Classes 
+--------------------------------------------------*/
 /*Containers for the words and sliders*/
 .settings{ 
   padding: 3rem 
@@ -153,6 +154,9 @@ a:hover{
 .settings_toggle {
 }
 
+/* title_page styles
+--------------------------------------------------*/
+
 .game-content {
   display: none;
 }
@@ -160,7 +164,7 @@ a:hover{
 .SMB {}
 
 .startbtn {
-  float:center
+  float:center;
 }
 
 .btn-main {
@@ -199,7 +203,6 @@ a:hover{
   right: 0;
 }
 
-
 .btn-outline-secondary {
   color: #000;
   background-color: #fff;
@@ -210,6 +213,10 @@ a:hover{
 .btn-outline-secondary:hover {
   background-color: #000;
   border-color: #000;
+}
+
+.nxtbtn {
+  float: left;
 }
 
 
@@ -248,4 +255,15 @@ body {
   width: auto;
   max-width: 680px;
   padding: 0 15px;
+}
+
+.textbox {
+  padding: 3rem 1.5rem;
+  margin:15rem;
+  text-align: center;
+  margin-left:auto;
+  margin-right:auto;
+  width: 700px;
+  height: 100px;
+  max-width: 680px;
 }

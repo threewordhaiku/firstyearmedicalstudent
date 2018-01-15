@@ -2,7 +2,6 @@
 
 {% block head %}
     <script src="{{ url_for('static', filename='main_page.js') }}"></script>
-
     <style>
       .startmenu {
         display: inline;
@@ -12,6 +11,13 @@
 
 
 {% block content %}
+  <!-- Putting <head> content here since head block extension is temporarily commented out in index.html-->
+  <style>
+  .game-content {
+    display: none;
+  }
+  </style>
+  <script src="{{ url_for('static', filename='main_page.js') }}"></script>
       <div class="template">
         <h2>
           You are a first-year<br />

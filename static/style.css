@@ -161,7 +161,9 @@ a:hover{
   display: none;
 }
 
-.SMB {}
+.SMB_new {}
+
+.SMB_load {}
 
 .startbtn {
   float:center;
@@ -266,4 +268,29 @@ body {
   width: 700px;
   height: 100px;
   max-width: 680px;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: none;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #C9C9C9;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: none;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #ACACAC;
 }

@@ -28,6 +28,7 @@
     <link href="../static/style.css" rel="stylesheet">
   </head>
 
+
 <!-- Main
 ************************************************* -->
   <body>
@@ -39,24 +40,30 @@
         </h2>
         <hr />
         
-        <!-- Start Menu Button -->
-        <div class="startmenu">
-          <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_new">New</button>
-          <a href="load_account_page.html"><button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_load">Load</button></a>
+        <!-- Name and Fruit -->
+        <div>
+          <form action="/action_page.php" style="text-align: left;">
+            <label for="name"><strong>Name</strong></label>
+            <input type="text" id="name" name="name" placeholder="Your name..">
+            <br><br>
+            <label for="fruit"><strong>Favourite Fruit</strong></label>
+            <input type="text" id="fruit" name="fruit" placeholder="Your favourite fruit..">
+         
+            <input type="submit" value="Submit">
+          </form>
         </div>
 
-      </div>
 
-      <!-- Starting Desc. -->
-      <div class="container text-center game-content">
-        <p>
-          You will be making ethical decisions about....
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
-        <p></p>
-        <br />
-        <a href="new_account_page.html"><button type="button" class="btn btn-main rounded-0 startbtn"><span>Start</span></button></a>
+
       </div>
     </main>
+  </body>
+
+
+
+
+
+
+      </div>
+    </main>
+  </body>

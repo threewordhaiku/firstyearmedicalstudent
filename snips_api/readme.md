@@ -1,8 +1,5 @@
 # snips_api
 
-This is a module for adding game text (both snippets and choices) to the 
-database without having to use SQL directly.
-
 >**Contents:**
 >**[Usage](#usage) |**
 >**[Requirements](#requirements) |**
@@ -10,6 +7,9 @@ database without having to use SQL directly.
 >**[API](#api) |**
 >**[Utilities](#utilities) |**
 >**[Other files](#other-files)**
+
+This is a module for adding game text (both snippets and choices) to the 
+database without having to use SQL directly.
 
 # Usage
 

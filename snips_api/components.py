@@ -9,18 +9,18 @@ class Choice():
     def __init__(self, label, next_snippet):
         self.label = label
         self.next_snippet = next_snippet
-        self._fromsnip = None
+        self.from_snip = None
 
         self.check_flags = []
         self.modifies_flags = []
 
     @property
     def snippet(self):
-        return self._fromsnip
+        return self.from_snip
     
 
     def set_source_snip(self, snip):
-        self._fromsnip = snip
+        self.from_snip = snip
 
 
     def add_check_flag(self, expression):
@@ -41,7 +41,7 @@ class Choice():
             # Unpack
             flag_name, operator, value = str(expr).split()
             
-            # Cast types
+            # Typechecking; this triggers ValueErrors
             flag_name = str(flag_name)
             operator = str(operator)
             value = int(value)
@@ -55,9 +55,8 @@ class Choice():
             raise
         # Otherwise raise generic BadExpressionError
         except:
-            #raise BadExpressionError(self, str(expr))
-            raise
-        return ' '.join(str(x) for x in [flag_name, operator, value])
+            raise BadExpressionError(self, str(expr))
+        return '{flag_name} {operator} {value}'.format(**locals())
 
 
     def ensure_valid_flag_name(self, flag_name): 
@@ -85,10 +84,6 @@ class Choice():
             msg = 'invalid operator "{}" (use {})'.format(
                 oper, ', '.join(accept_opers))
             raise BadExpressionError(self, oper, msg)
-
-
-    def make_sql(self):
-        pass
 
 
     def __repr__(self):
@@ -204,7 +199,7 @@ class TerminalSnippet(Snippet):
 
 class RootSnippet(Snippet):
     """Special Snippet class denoting start of a chain of Snippets"""
-    def __init__(self, text, snip_id, *args, **kwargs):
+    def __init__(self, snip_id, text, *args, **kwargs):
         try:
             super(RootSnippet, self).__init__(
                 text, int(snip_id), *args, **kwargs)

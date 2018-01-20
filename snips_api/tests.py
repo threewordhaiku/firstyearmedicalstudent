@@ -46,13 +46,12 @@ def _setup_dburl():
 
 class ComponentsTestCase(unittest.TestCase):
     def test_api(self):
-        s_start = Snippet('Dr. Smith: "Okay, last question. If a runaway train is bearing down--"')
+        s_start = RootSnippet(9000, 'Dr. Smith: "Okay, last question. If a runaway train is bearing down--"')
         s_nointerrupt = Snippet('Dr. Smith: "--well, actually, I think you know the rest of it. What do you think?"')
         s_nointerrupt2 = Snippet('Dr. Smith: "Hmm, I see. Alright, that\'s all for today. Thanks for coming down."')
         s_interrupted = Snippet('Dr. Smith: "Oh. I see. Well then, I think that\'s all for today."')
         end = TerminalSnippet('That was a strange interview...')
 
-        s_start.set_snip_id(9000)
         s_start.add_choice(
             "(You've heard this one before...)",
             next_snippet=s_nointerrupt)

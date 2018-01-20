@@ -10,7 +10,7 @@
     <title>You are a first-year medical student</title>
 
     <script src="../static/core/libs/jquery.js"></script>
-    <script src="../static/style.js"></script>
+    <script src="../static/core/style.js"></script>
     
     <!-- Page scripts -->
     <script src="../static/main_page.js"></script>
@@ -26,8 +26,8 @@
 
     <!-- Custom styles for this template -->
     <link href="../static/core/style.css" rel="stylesheet">
-    <link href="../static/title_page.css" rel="stylesheet">
   </head>
+
 
 <!-- Main
 ************************************************* -->
@@ -40,24 +40,22 @@
         </h2>
         <hr />
         
-        <!-- Start Menu Button -->
-        <div class="startmenu">
-          <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_new">New</button>
-          <a href="load_account_page.html"><button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_load">Load</button></a>
+        <!-- Name -->
+        <div>
+          <form action="/action_page.php" style="text-align: left;">
+            <label for="name"><strong>Load Game</strong></label>
+            <input type="text" id="name" name="name" placeholder="Enter Game Code..">
+            <br><br>
+            <a href="title_page.html"><button type="button" class="nxtbtn btn-left rounded-0" style="float: left"><span>Back to Main</span></button></a>       
+            <a href="game.html"><button type="button" class="nxtbtn btn-right rounded-0" style="float: right"><span>Submit</span></button></a>
+          </form>
         </div>
 
       </div>
+    </main>
+  </body>
 
-      <!-- Starting Desc. -->
-      <div class="container text-center game-content">
-        <p>
-          You will be making ethical decisions about....
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
-        <p></p>
-        <br />
-        <a href="game.html"><button type="button" class="btn btn-main rounded-0 startbtn"><span>Start</span></button></a>
+
       </div>
     </main>
+  </body>

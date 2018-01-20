@@ -19,3 +19,10 @@ the correct encoding settings.
 workbook shares its name with one of the files the macro is trying
 to load. Close the sheet or rename the incoming file.
 7. I wrote the macro so it's safe.
+
+---
+
+###sample_parser_text.txt
+
+Sample text for snips_api/snips_parser.py
+For usage notes, see snips_api/readme.txt

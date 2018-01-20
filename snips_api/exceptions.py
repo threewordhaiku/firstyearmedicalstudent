@@ -7,7 +7,7 @@ class ChoiceError(Exception):
         self.choice = choice
 
 
-class BadExpression(ChoiceError):
+class BadExpressionError(ChoiceError):
     """Bad expression provided to Choice"""
     def __init__(self, choice, expr, msg=None):
         if msg is None:
@@ -15,7 +15,7 @@ class BadExpression(ChoiceError):
                    '(expected "flag_name->str operator->str value->int", '
                    'got "{}")'
                 ).format(choice, expr)
-        super(BadExpression, self).__init__(choice, msg=msg)
+        super(BadExpressionError, self).__init__(choice, msg=msg)
         self.choice = choice
         self.expression = expr
 
@@ -32,28 +32,17 @@ class SnippetError(Exception):
         self.snippet = snippet
 
 
-class CannotRedefineSnipID(SnippetError):
+class CannotRedefineSnipIDError(SnippetError):
     """Attempted to redefine snip_id in committed snippet"""
     def __init__(self, snippet):
         msg = ('Attempted to overwrite snip_id {} for snippet {} '
                '(has this snippet already been committed?)'
               ).format(snippet.snip_id, str(snippet))
-        super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
+        super(CannotRedefineSnipIDError, self).__init__(snippet, msg=msg)
         self.snip_id = snippet.snip_id
         self.snippet = snippet
 
 
-class ConflictingSnipID(SnippetError):
-    """Attempted to redefine snip_id in uncommitted snippet"""
-    def __init__(self, snippet, incoming_snip_id):
-        msg = ('Attempted to overwrite snip_id {} for snippet {} '
-               '(conflict resolution strategy not provided while generating '
-               'snip_ids for committing to db)'
-              ).format(snippet.snip_id, str(snippet))
-        super(CannotRedefineSnipID, self).__init__(snippet, msg=msg)
-        self.snip_id = snippet.snip_id
-        self.incoming_snip_id = incoming_snip_id
-        self.snippet = snippet
 
 
 class TerminalSnippetError(SnippetError):
@@ -86,4 +75,12 @@ class TimidError(CompilerError):
                    ))
         super(TimidError, self).__init__(hint)
 
+
+
+class ParserError(Exception):
+    """Basic exception for errors raised by the text-to-sql parser"""
+    def __init__(self, hint=None):
+        if hint is None:
+            hint = ('Something went wrong while parsing your input text.')
+        super(ParserError, self).__init__(hint)
 

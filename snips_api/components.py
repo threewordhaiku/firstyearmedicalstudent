@@ -7,6 +7,7 @@ class Choice():
     def __init__(self, label, next_snippet):
         self.label = label
         self.next_snippet = next_snippet
+        self._fromsnip = None
 
         self.check_flags = []
         self.modifies_flags = []
@@ -15,6 +16,10 @@ class Choice():
     def snippet(self):
         return self._fromsnip
     
+
+    def set_source_snip(self, snip):
+        self._fromsnip = snip
+
 
     def add_check_flag(self, expression):
         expr = self.parse_expression(expression)
@@ -47,12 +52,12 @@ class Choice():
             self.ensure_valid_flag_name(flag_name)
             self.ensure_valid_operator(operator, use_symbols)
         
-        # Re-raise BadExpressions from ensure_valid funcs, if any
-        except BadExpression:
+        # Re-raise BadExpressionErrors from ensure_valid funcs, if any
+        except BadExpressionError:
             raise
-        # Otherwise raise generic BadExpression
+        # Otherwise raise generic BadExpressionError
         except:
-            #raise BadExpression(self, str(expr))
+            #raise BadExpressionError(self, str(expr))
             raise
         return ' '.join(str(x) for x in [flag_name, operator, value])
 
@@ -63,7 +68,9 @@ class Choice():
         for c in flag_name:
             if c not in accept_chars:
                 msg = 'invalid flagname "{}" (use letters and underscore)'
-                raise BadExpression(self, flag_name, msg.format(flag_name))
+                raise BadExpressionError(self, 
+                                         flag_name,
+                                         msg.format(flag_name))
 
 
     def ensure_valid_operator(self, oper, symbol_set):
@@ -85,7 +92,7 @@ class Choice():
         if oper not in accept_opers:
             msg = 'invalid operator "{}" (use {})'.format(
                 oper, ', '.join(accept_opers))
-            raise BadExpression(self, oper, msg)
+            raise BadExpressionError(self, oper, msg)
 
 
     def make_sql(self):
@@ -93,13 +100,18 @@ class Choice():
 
 
     def __repr__(self):
-        """Pretty-print Choice object"""
-        fr = self.snippet.snip_id
-        to = self.next_snippet.snip_id
+        """Pretty-print Choice object"""    
         label = self.label
         if len(label) > 20:
             label = label[:17] + '...'
-        m = '<Choice from {fr} to {to}: {label}>'
+        
+        fr = to = ''
+        if self.snippet:
+            fr = ' from ' + str(self.snippet.snip_id)
+        if fr and self.next_snippet:
+            to = ' to ' + str(self.next_snippet.snip_id)
+        
+        m = '<Choice{fr}{to}: {label}>'
         return m.format(**locals())
 
 
@@ -113,13 +125,13 @@ class Snippet():
 
     def set_snip_id(self, snip_id):
         if self.snip_id is not 'pending':
-            raise CannotRedefineSnipID(self)
+            raise CannotRedefineSnipIDError(self)
         self.snip_id = snip_id
 
 
     def add_choice(self, *args, **kwargs):
         c = Choice(*args, **kwargs)
-        c._fromsnip = self  # Special attr used for convenience
+        c.set_source_snip(self)  # Special attr used for convenience
         self.choices.append(c)
         return c
 
@@ -202,7 +214,8 @@ class RootSnippet(Snippet):
     """Special Snippet class denoting start of a chain of Snippets"""
     def __init__(self, text, snip_id, *args, **kwargs):
         try:
-            super(RootSnippet, self).__init__(text, int(snip_id), *args, **kwargs)
+            super(RootSnippet, self).__init__(
+                text, int(snip_id), *args, **kwargs)
         except ValueError:
             msg = 'Bad snip_id provided (expected int, got: {})'.format(
                 repr(snip_id))

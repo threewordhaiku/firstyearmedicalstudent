@@ -68,8 +68,8 @@ class snips_api.components.Snippet(text, snip_id=None)
   such as Choices, which are created using Snippet.add_choice().
 
   Args:
-    text    -- Game text. Commits into database under the `game_text` column in
-               the `snippets` table.
+    text    -- Game text. Commits into database under the `game_text` column
+               in the `snippets` table.
     snip_id -- Unique integer snip_id that identifies the snippet to other 
                game components. Compulsory for first snippet, if committing 
                snippets to database.
@@ -82,7 +82,8 @@ class snips_api.components.Snippet(text, snip_id=None)
   Methods:
     set_snip_id(snip_id)
       Sets this snippet's snip_id to the given integer. Will raise
-      CannotRedefineSnipID if this snippet's snip_id is no longer 'pending'.
+      CannotRedefineSnipIDError if this snippet's snip_id is no longer 
+      'pending'.
         Returns nothing.
 
     add_choice(*args, **kwargs)

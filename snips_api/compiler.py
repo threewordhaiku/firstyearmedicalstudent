@@ -8,7 +8,7 @@ def snippet_chain_to_sql_data(snip, insert_method='timid'):
     try:
         int(snip.snip_id)
     except ValueError:
-        raise CompilerError('The provided snippet has invalid snip_id '
+        raise CompilerError('The starting snippet has invalid snip_id '
                             '(expected int, got {})'.format(str(snip.snip_id))
                            )
 
@@ -200,7 +200,7 @@ def generate_sql_for_choices(snips, dict_snip_to_id):
         sql = """INSERT INTO choices({}) VALUES ({})""".format(
             cols, make_placeholders_for(choice_dict.keys()))
         
-        data = choice_dict.values()
+        data = list(choice_dict.values())
         output.append((sql, data))
 
     return output

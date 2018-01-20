@@ -60,11 +60,11 @@ class Choice():
 
 
     def ensure_valid_flag_name(self, flag_name): 
-        accept_chars = "_abcdefghijklmnopqrstuvwxyz"
+        accept_chars = "_abcdefghijklmnopqrstuvwxyz1234567890"
         accept_chars += accept_chars.upper()
         for c in flag_name:
             if c not in accept_chars:
-                msg = 'invalid flagname "{}" (use letters and underscore)'
+                msg = 'invalid flag name "{}" (alphanum. and underscore only)'
                 raise BadExpressionError(self, 
                                          flag_name,
                                          msg.format(flag_name))

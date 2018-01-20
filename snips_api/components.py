@@ -1,6 +1,8 @@
 from collections import OrderedDict
-
 from .exceptions import *
+
+VALID_OPERATORS_COMPARISON = '== != <= >= < >'
+VALID_OPERATORS_ASSIGNMENT = '= += -= *= /='
 
 
 class Choice():
@@ -23,19 +25,15 @@ class Choice():
 
     def add_check_flag(self, expression):
         expr = self.parse_expression(expression)
-        self.check_flags.append(
-            #' '.join((flag_name, operator, value))
-            expr
-        )
+        self.check_flags.append(expr)
+        return self
 
 
     def add_modifies_flag(self, expression):
         expr = self.parse_expression(expression, 
             use_symbols='assignment')
-        self.modifies_flags.append(
-            #' '.join((flag_name, operator, value))
-            expr
-        )
+        self.modifies_flags.append(expr)
+        return self
 
 
     def parse_expression(self, expr, use_symbols='comparison'):
@@ -75,14 +73,8 @@ class Choice():
 
     def ensure_valid_operator(self, oper, symbol_set):
         operators = dict(
-            comparison=(
-                '== != '        # equivalence
-                '< > <= >= '    # magnitude
-            ).split(),
-            
-            assignment=(
-                '= += -= *= /= '  # assignment
-            ).split()
+            comparison=VALID_OPERATORS_COMPARISON.split(),
+            assignment=VALID_OPERATORS_ASSIGNMENT.split()
         )
         if symbol_set not in operators:
             raise Exception('Invalid operator set selection '
@@ -102,8 +94,8 @@ class Choice():
     def __repr__(self):
         """Pretty-print Choice object"""    
         label = self.label
-        if len(label) > 20:
-            label = label[:17] + '...'
+        if len(label) > 25:
+            label = label[:22] + '...'
         
         fr = to = ''
         if self.snippet:
@@ -179,8 +171,8 @@ class Snippet():
         """Pretty-print Snippet object"""
         snip_id = self.snip_id
         text = self.text
-        if len(text) > 20:
-            text = text[:17] + '...'
+        if len(text) > 25:
+            text = text[:22] + '...'
         m = '<Snippet id {snip_id}: {text}>'
         return m.format(**locals())
 
@@ -230,4 +222,3 @@ class RootSnippet(Snippet):
             text = text[:17] + '...'
         m = '<RootSnippet id {snip_id}: {text}>'
         return m.format(**locals())
-

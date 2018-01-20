@@ -6,7 +6,12 @@ def lookup_snippet(snip_id):
 
 
 def pprint_generator(gen, maxcols=60):
-    """Pretty-prints the generator output from Snippet.generate_chain_sql()"""
+    """Pretty-prints the generator output from Snippet.generate_chain_sql()
+
+    Usage:
+        gen = my_snippet.generate_chain_sql()
+        pprint_generator(gen)
+    """
     def trunc(t):
         if len(t) > maxcols:
             t = t[:maxcols - 3] + '...'

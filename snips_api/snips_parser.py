@@ -1,3 +1,26 @@
+"""
+# snips_parser.py
+
+This module contains functions to create SQL queries from plain text.
+The main steps for this process are:
+    0.  Parse text for directives that contain meta-information about the
+        input text (e.g. comment symbols)
+
+    1.  Parse text into independant Choices and Snippets (in that order). At
+        At this stage, snippets are identified by a 'reference number', not by
+        any snip_id.
+
+    2.  Link choices to snippets by resolving reference numbers to the 
+        associated Snippet object
+
+    3.  Verify that all snippets are linkable (no 'orphaned' snippets, i.e.
+        all snippets are reachable from the 'root snippet', the first snippet
+        defined in the input text)
+
+    4.  Generate and yield SQL, data pairs for execution into database
+"""
+
+
 import re
 
 from .components import Choice, Snippet
@@ -18,6 +41,8 @@ def parse(text):
     """Takes a plaintext string and parses its contents into SQL statements
 
     Intended to be the entry-point to the module.
+    This function bridges the conversion of Snippets to their (query, data)
+    representation for execution to the database.
     """
     snippets, directives = parse_text(text)
     
@@ -34,6 +59,7 @@ def parse(text):
 
 
 def parse_text(text):
+    """Converts text into snippets and directives."""
     textlines = text.strip().splitlines()
     textlines, directives = get_directives(textlines)
     

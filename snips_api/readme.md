@@ -39,13 +39,12 @@ connection if you do not intend to commit your snippets to the database.
 
 # Parser
 
-**Jump to formatting for:**
-
-**[Directives] |**
-**[Snippets] |**
-**[Choices] |**
-**[Flag operations] |**
-**[Sample file](../misc_files/sample_parser_text.txt)**
+>**Jump to formatting for:**
+>**[Directives] |**
+>**[Snippets] |**
+>**[Choices] |**
+>**[Flag operations] |**
+>**[Sample file](../misc_files/sample_parser_text.txt)**
 
 
 The snips_parser submodule offers a single `parse()` function, which is 
@@ -190,12 +189,11 @@ Here's an example:
 
 # API
 
-**Jump to:**
-
-**[Snippet class](#snippet) |**
-**[Choice class](#choice) |**
-**[Other classes](#others) |**
-**[Example](#api-usage-example)**
+>**Jump to:**
+>**[Snippet class](#snippet) |**
+>**[Choice class](#choice) |**
+>**[Other classes](#others) |**
+>**[Example](#api-usage-example)**
 
 >Note: all items in snips_api.components can be directly imported from the
 >base snips_api module.

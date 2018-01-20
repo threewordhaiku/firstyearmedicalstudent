@@ -1,36 +1,39 @@
 from collections import OrderedDict
-
 from .exceptions import *
+
+VALID_OPERATORS_COMPARISON = '== != <= >= < >'
+VALID_OPERATORS_ASSIGNMENT = '= += -= *= /='
 
 
 class Choice():
     def __init__(self, label, next_snippet):
         self.label = label
         self.next_snippet = next_snippet
+        self.from_snip = None
 
         self.check_flags = []
         self.modifies_flags = []
 
     @property
     def snippet(self):
-        return self._fromsnip
+        return self.from_snip
     
+
+    def set_source_snip(self, snip):
+        self.from_snip = snip
+
 
     def add_check_flag(self, expression):
         expr = self.parse_expression(expression)
-        self.check_flags.append(
-            #' '.join((flag_name, operator, value))
-            expr
-        )
+        self.check_flags.append(expr)
+        return self
 
 
     def add_modifies_flag(self, expression):
         expr = self.parse_expression(expression, 
             use_symbols='assignment')
-        self.modifies_flags.append(
-            #' '.join((flag_name, operator, value))
-            expr
-        )
+        self.modifies_flags.append(expr)
+        return self
 
 
     def parse_expression(self, expr, use_symbols='comparison'):
@@ -38,7 +41,7 @@ class Choice():
             # Unpack
             flag_name, operator, value = str(expr).split()
             
-            # Cast types
+            # Typechecking; this triggers ValueErrors
             flag_name = str(flag_name)
             operator = str(operator)
             value = int(value)
@@ -47,35 +50,30 @@ class Choice():
             self.ensure_valid_flag_name(flag_name)
             self.ensure_valid_operator(operator, use_symbols)
         
-        # Re-raise BadExpressions from ensure_valid funcs, if any
-        except BadExpression:
+        # Re-raise BadExpressionErrors from ensure_valid funcs, if any
+        except BadExpressionError:
             raise
-        # Otherwise raise generic BadExpression
+        # Otherwise raise generic BadExpressionError
         except:
-            #raise BadExpression(self, str(expr))
-            raise
-        return ' '.join(str(x) for x in [flag_name, operator, value])
+            raise BadExpressionError(self, str(expr))
+        return '{flag_name} {operator} {value}'.format(**locals())
 
 
     def ensure_valid_flag_name(self, flag_name): 
-        accept_chars = "_abcdefghijklmnopqrstuvwxyz"
+        accept_chars = "_abcdefghijklmnopqrstuvwxyz1234567890"
         accept_chars += accept_chars.upper()
         for c in flag_name:
             if c not in accept_chars:
-                msg = 'invalid flagname "{}" (use letters and underscore)'
-                raise BadExpression(self, flag_name, msg.format(flag_name))
+                msg = 'invalid flag name "{}" (alphanum. and underscore only)'
+                raise BadExpressionError(self, 
+                                         flag_name,
+                                         msg.format(flag_name))
 
 
     def ensure_valid_operator(self, oper, symbol_set):
         operators = dict(
-            comparison=(
-                '== != '        # equivalence
-                '< > <= >= '    # magnitude
-            ).split(),
-            
-            assignment=(
-                '= += -= *= /= '  # assignment
-            ).split()
+            comparison=VALID_OPERATORS_COMPARISON.split(),
+            assignment=VALID_OPERATORS_ASSIGNMENT.split()
         )
         if symbol_set not in operators:
             raise Exception('Invalid operator set selection '
@@ -85,21 +83,22 @@ class Choice():
         if oper not in accept_opers:
             msg = 'invalid operator "{}" (use {})'.format(
                 oper, ', '.join(accept_opers))
-            raise BadExpression(self, oper, msg)
-
-
-    def make_sql(self):
-        pass
+            raise BadExpressionError(self, oper, msg)
 
 
     def __repr__(self):
-        """Pretty-print Choice object"""
-        fr = self.snippet.snip_id
-        to = self.next_snippet.snip_id
+        """Pretty-print Choice object"""    
         label = self.label
-        if len(label) > 20:
-            label = label[:17] + '...'
-        m = '<Choice from {fr} to {to}: {label}>'
+        if len(label) > 25:
+            label = label[:22] + '...'
+        
+        fr = to = ''
+        if self.snippet:
+            fr = ' from ' + str(self.snippet.snip_id)
+        if fr and self.next_snippet:
+            to = ' to ' + str(self.next_snippet.snip_id)
+        
+        m = '<Choice{fr}{to}: {label}>'
         return m.format(**locals())
 
 
@@ -113,13 +112,13 @@ class Snippet():
 
     def set_snip_id(self, snip_id):
         if self.snip_id is not 'pending':
-            raise CannotRedefineSnipID(self)
+            raise CannotRedefineSnipIDError(self)
         self.snip_id = snip_id
 
 
     def add_choice(self, *args, **kwargs):
         c = Choice(*args, **kwargs)
-        c._fromsnip = self  # Special attr used for convenience
+        c.set_source_snip(self)  # Special attr used for convenience
         self.choices.append(c)
         return c
 
@@ -167,8 +166,8 @@ class Snippet():
         """Pretty-print Snippet object"""
         snip_id = self.snip_id
         text = self.text
-        if len(text) > 20:
-            text = text[:17] + '...'
+        if len(text) > 25:
+            text = text[:22] + '...'
         m = '<Snippet id {snip_id}: {text}>'
         return m.format(**locals())
 
@@ -200,9 +199,10 @@ class TerminalSnippet(Snippet):
 
 class RootSnippet(Snippet):
     """Special Snippet class denoting start of a chain of Snippets"""
-    def __init__(self, text, snip_id, *args, **kwargs):
+    def __init__(self, snip_id, text, *args, **kwargs):
         try:
-            super(RootSnippet, self).__init__(text, int(snip_id), *args, **kwargs)
+            super(RootSnippet, self).__init__(
+                text, int(snip_id), *args, **kwargs)
         except ValueError:
             msg = 'Bad snip_id provided (expected int, got: {})'.format(
                 repr(snip_id))
@@ -217,4 +217,3 @@ class RootSnippet(Snippet):
             text = text[:17] + '...'
         m = '<RootSnippet id {snip_id}: {text}>'
         return m.format(**locals())
-

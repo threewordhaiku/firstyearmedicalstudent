@@ -1,3 +1,7 @@
+"""
+Compiler used by components.Snippet.generate_chain_sql()
+"""
+
 from .exceptions import *
 from db_tools import AppDBConnection, AppCursor
 
@@ -5,10 +9,14 @@ from itertools import zip_longest
 
 
 def snippet_chain_to_sql_data(snip, insert_method='timid'):
+    """Creates SQL for all snippets reachable from the given 'root snippet'
+
+    Returns a list of (query, data) tuples.
+    """
     try:
         int(snip.snip_id)
     except ValueError:
-        raise CompilerError('The provided snippet has invalid snip_id '
+        raise CompilerError('The starting snippet has invalid snip_id '
                             '(expected int, got {})'.format(str(snip.snip_id))
                            )
 
@@ -98,7 +106,7 @@ def assign_ids(snips, insert_method):
 
 
 def fetch_rows_with_snipids(list_snip_ids):
-    """Finds out for each snip_id whether a record exists already
+    """Checks for each snip_id in `list_snip_ids` if a record exists already
 
     Returns a dict of {snip_id: (row or None)}
     """
@@ -116,7 +124,7 @@ def fetch_rows_with_snipids(list_snip_ids):
 
 
 def find_spare_snipids(startfrom, needed):
-    """Generates a list of spare snip_ids"""
+    """Provides list containing snip_ids that are unused in the db"""
     free_ids = []
     found = 0
     while found < needed:
@@ -163,7 +171,11 @@ def find_spare_snipids(startfrom, needed):
 
 
 def generate_sql_for_snippets(snips, dict_snip_to_id):
-    """Compiles query and data for inserting into snippets table"""
+    """Compiles query and data for inserting into snippets table
+
+    Returns a single tuple of (sql, values). `values` is a list of values
+    that are data to bind to the returned query.
+    """
     # `placeholders` is a list of n copies of '(%s, %s)' where n = len(snips)
     # They are placeholders for actual values that are merged into the query
     # when the query is executed to the database via psycopg2
@@ -182,7 +194,8 @@ def generate_sql_for_snippets(snips, dict_snip_to_id):
 def generate_sql_for_choices(snips, dict_snip_to_id):
     """Compiles query and data for inserting into choices table
 
-    Returns a list of (sql, data) tuples
+    Returns a list of (sql, data) tuples. The `data` in each tuple is a list
+    of values that are data to bind to the returned query.
     """
     # choices_data is a list of dictionaries
     # dict key is column name and dict value is the insert value
@@ -200,7 +213,7 @@ def generate_sql_for_choices(snips, dict_snip_to_id):
         sql = """INSERT INTO choices({}) VALUES ({})""".format(
             cols, make_placeholders_for(choice_dict.keys()))
         
-        data = choice_dict.values()
+        data = list(choice_dict.values())
         output.append((sql, data))
 
     return output

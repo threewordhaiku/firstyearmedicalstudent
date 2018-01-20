@@ -1,6 +1,7 @@
 # snips_api
 
-*A module for writing Snippets to the database*
+This is a module for adding game text (both snippets and choices) to the 
+database without having to use SQL directly.
 
 ## Contents
 
@@ -39,6 +40,7 @@ connection if you do not intend to commit your snippets to the database.
 # Parser
 
 **Jump to formatting for: **
+
 **[Directives] |**
 **[Snippets] |**
 **[Choices] |**
@@ -113,7 +115,7 @@ In your input text, snippets are indexed using *reference numbers*, which help
 you to maintain references to your snippets until it's time to assign them 
 snip_ids. 
 
-Lines that define snippets must not be indented and must contain a
+Lines that define snippets must **not** be indented and must contain a
 reference number unique within each document containing your input. If you are
 passing string literals into the [`parse()`](#parser) function, the reference
 number must be unique within the string. Reference numbers can be surrounded 
@@ -169,8 +171,8 @@ follow the same indentation rules as [choices], except they have have to be
 indented more deeply than the choices they are applicable for. 
 
 There's not a lot to say about these expressions. Make sure flag names are 
-valid (regex: `[_\w]+`), have a space in between flag name, operator and
-value, make sure your operator is valid in Python.
+valid (alphanumeric and underscore only). The flag name, operator and value 
+should be separated by a space. Ensure that your operator is valid in Python.
 
 Here's an example:
 ```
@@ -181,14 +183,15 @@ Here's an example:
         patient_deaths += 1
 ```
 
-[directives](#formatting-directives)
-[snippets](#formatting-snippets)
-[choices](#formatting-choices)
-[flag operations](#formatting-flag-operations)
+[directives]: #formatting-directives
+[snippets]: #formatting-snippets
+[choices]: #formatting-choices
+[flag operations]: #formatting-flag-operations
 
 # API
 
 **Jump to: **
+
 **[Snippet class](#snippet) |**
 **[Choice class](#choice) |**
 **[Other classes](#others) |**

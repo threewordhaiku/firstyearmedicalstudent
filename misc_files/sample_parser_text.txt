@@ -11,12 +11,13 @@ directive:ROOT_SNIP_ID 999
 27. I almost thought I had the wrong person until I noticed the nameplate behind the bedrest. The illness has certainly taken a toll on John.  
     Next
 
-28. Introducing myself, I took a chair and sat beside John.
+(28..... Introducing myself, I took a chair and sat beside John.
     How are you feeling?  -> (29)
     You’re looking good today. -> (30)
         bm_patient += 1
-29. John: “Ah, doctor. Not too good…”
-    Next -> (34)
+        Requires skin_thickness >= 5
+(29) John: “Ah, doctor. Not too good…”
+    Next -> ->34;
 30. John: “What?”
     I mean, how are you feeling today?  -> (29)
     I mean, you look great today! -> (31)

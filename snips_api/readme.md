@@ -2,15 +2,16 @@
 
 *A module for writing Snippets to the database*
 
-### Contents
+## Contents
 
 **[Usage](#usage) |**
 **[Requirements](#requirements) |**
-**[Sample usage](#sample) |**
-**[API documentation](#api) |**
+**[Parser](#parser) |**
+**[API](#api) |**
+**[Utilities](#utilities) |**
 **[Other files](#other-files)**
 
-### Todo
+**Todo**
 
 - Update readme to cover the `snips_parser`
 
@@ -20,6 +21,7 @@
 This module is intended to be used as a scriptable interface for the database.
 The module is currently functioning, but still in testing for use with the 
 main game app.
+
 
 # Requirements
 You should know [how to define your `DATABASE_URL` environment variable][1] 
@@ -33,60 +35,164 @@ connection if you do not intend to commit your snippets to the database.
 [1]: https://trello.com/c/rzDEieoG/70-heroku-app-deployment-steps
 
 
-# Sample
+
+# Parser
+
+**Jump to formatting for: **
+**[Directives] |**
+**[Snippets] |**
+**[Choices] |**
+**[Flag operations] |**
+**[Sample file](../misc_files/sample_parser_text.txt) |**
+
+
+The snips_parser submodule offers a single `parse()` function, which is 
+intended to be its sole entry point. The parser simplifies the process for
+feeding snippets and choices to the database mainly by making data 
+representation less cumbersome and more intuitive.
+
+The `parse()` function takes the specially-formatted text as its single 
+string argument and will raise a `ParserError` if there are any problems with 
+the input text. If all goes well, the function then returns a generator that 
+yields (query, data) tuples for execution to the database.
+
+
+The role of each line in your input text is inferred from how they are 
+formatted. There are a total of four roles: [directives], [snippets], 
+[choices] and [flag operations]. An example of the formatted text input can 
+be found in this file: 
+[`sample_parser_text.txt`](../misc_files/sample_parser_text.txt). 
+For details on formatting, follow the links above for each role to their 
+respective subsections below.
+
+To use the parser, you must provide the text, and then execute the `parse()` 
+function's output to the database:
 
 ```py
-from snips_api import Snippet, RootSnippet
+# This script should be placed at the same directory level as webapp.py
+from snips_api import snips_parser as sp
+from db_tools import QuickCursor
 
-# Make some snippets:
-s_start = RootSnippet(9000, 'Dr. Smith: "Okay, last question. If a runaway train is bearing down--"')
-s_nointerrupt = Snippet('Dr. Smith: "--well, actually, I think you know the rest of it. What do you think?"')
-s_nointerrupt2 = Snippet('Dr. Smith: "Hmm, I see. Alright, that\'s all for today. Thanks for coming down."')
-s_interrupted = Snippet('Dr. Smith: "Oh. I see. Well then, I think that\'s all for today."')
-end = TerminalSnippet('That was a strange interview...')
+with open('misc_files/sample_parser_text.txt', 'r') as f:
+    text = f.read()
 
-# The RootSnippet and TerminalSnippet are basically special cases of Snippets.
-# Imagine that the Snippets form a tree starting from the RootSnippet and
-# ending at the branch tips with TerminalSnippets.
-
-# Add some choices to the snippets. Choices 'connect' snippets.
-s_start.add_choice(
-    "(You've heard this one before...)",
-    next_snippet=s_nointerrupt)
-
-# We can describe how the choice affects various game flags:
-s_nointerrupt.add_choice(
-    "I won't do anything",
-    next_snippet=s_nointerrupt2
-        ).add_modifies_flag('tut_switch_track = 0')
-s_nointerrupt.add_choice(
-    "I'd switch the tracks",
-    next_snippet=s_nointerrupt2
-        ).add_modifies_flag('tut_switch_track = 1')
-
-# The add_check_flag defines conditions for the choice to be selectable.
-# Both add_check and add_modifies methods return their Choice instance,
-# so you can chain these methods together for readability, as shown here.
-s_start.add_choice(
-    "I won't do anything.",
-    next_snippet=s_interrupted
-        ).add_check_flag(
-            'skin_thickness >= 5'
-        ).add_modifies_flag(
-            'tut_board_annoyed += 1'
-        ).add_modifies_flag(
-            'tut_switch_track = 0')
-
-s_nointerrupt2.add_choice(
-  '(Leave)',
-  next_snippet=end)
-s_interrupted.add_choice(
-  '(Leave)',
-  next_snippet=end)
+with QuickCursor() as cur:
+    for sql, data in snips_parser.parse(text):
+        cur.execute(sql, data)
 ```
 
+## Formatting directives
+
+Directives contain meta-information about your input. They must appear 
+together at the top of your text.  These are the available directives:
+
+directive | argument | dependencies | compulsory | description |
+--------- |:--------:|:------------:|:----------:| ----------- |
+ROOT_SNIP_ID | int   | -            | YES        | Indicates the snip_id of the first snippet.
+COMMENT_MARKER | str | -            | -          | Indicates the inline comment character(s). If not declared, comments will be treated as actual input.
+REF_NUMS_ARE_SNIP_IDS | - | -       | -          | Makes the reference numbers provided for each snippet become their snip_ids in the database.
+OVERWRITE_DB_SNIP_IDS | - | REF_NUMS_ARE_SNIP_IDS | - | Makes the reference numbers provided for each snippet overwrite existing snip_ids in the database.
+
+Only one directive may be declared per line. The line must not begin with any 
+indent, and must start with `directive:`. Arguments are delimited by a single
+space. If you declare a directive without its dependencies, a ParserError will
+be raised.
+
+Here is an example of declaring directives:
+
+```
+directive:ROOT_SNIP_ID 456
+directive:COMMENT_MARKER //
+directive:REF_NUMS_ARE_SNIP_IDS
+directive:OVERWRITE_DB_SNIP_IDS
+```
+
+## Formatting snippets
+
+In your input text, snippets are indexed using *reference numbers*, which help
+you to maintain references to your snippets until it's time to assign them 
+snip_ids. 
+
+Lines that define snippets must not be indented and must contain a
+reference number unique within each document containing your input. If you are
+passing string literals into the [`parse()`](#parser) function, the reference
+number must be unique within the string. Reference numbers can be surrounded 
+by any kind of symbol(s).
+
+You can force snippet reference numbers to be used as snip_ids using the 
+`REF_NUMS_ARE_SNIP_IDS` [directive].
+
+Here is an example of how snippets are formatted. Note that while there are no
+restrictions on how the reference numbers are enclosed, I recommend picking a
+style and sticking to it consistently.
+
+```
+28. Introducing myself, I took a chair and sat beside John.
+    (some choice goes here)
+29. John: “Ah, doctor. Not too good…”
+    (another choice goes here)
+```
+
+## Formatting choices
+
+Because the originate from [snippets], choices must be placed immediately 
+after the snippet they 'originate' from. They must be indented (any amount of 
+whitespace will count), and those belonging to the same snippet must be at the 
+same indent level (like in Python).
+
+Choices must each have a label (compulsory) and a 'target' snippet that they 
+link to (explicitly or implicitly defined).
+
+To explicitly specify a snippet, place a `->` after the label text, followed 
+by the snippet's reference number. If you do not indicate the target snippet
+(meaning you do not have the `->` and a reference number), the choice will
+link to the next immediate snippet that follows.
+
+Below is an example of how choices are formatted -- in the example, the 
+"So, John..." option implicitly points to snippet 29 below it, while the  
+"looking good" option explicitly points to snippet 30.
+
+Note that while there are no restrictions on how the reference numbers are 
+enclosed, I recommend picking a style and sticking to it consistently.
+```
+28. (some snippet text here)
+    “So, John, how are you feeling today?”
+    “You’re looking good today.” -> 30
+29. (yeahhh more snippet text)
+    “I mean, you look great today!” -> 33
+```
+
+## Formatting flag operations
+
+Flag operations that use expressions for checking and modifying flag states 
+follow the same indentation rules as [choices], except they have have to be 
+indented more deeply than the choices they are applicable for. 
+
+There's not a lot to say about these expressions. Make sure flag names are 
+valid (regex: `[_\w]+`), have a space in between flag name, operator and
+value, make sure your operator is valid in Python.
+
+Here's an example:
+```
+(28) (some snippet text here)
+    (some choice)
+        Requires skin_thickness >= 5
+        johndoe_death = 1
+        patient_deaths += 1
+```
+
+[directives](#formatting-directives)
+[snippets](#formatting-snippets)
+[choices](#formatting-choices)
+[flag operations](#formatting-flag-operations)
+
 # API
-**Jump to: [Snippet](#snippet) | [Choice](#choice) | [Others](#others)**
+
+**Jump to: **
+**[Snippet class](#snippet) |**
+**[Choice class](#choice) |**
+**[Other classes](#others) |**
+**[Example](#api-usage-example)**
 
 >Note: all items in snips_api.components can be directly imported from the
 >base snips_api module.
@@ -231,6 +337,60 @@ class snips_api.components.TerminalSnippet(Snippet)
       Overwrites the parent method to raise TerminalSnippetError.
 ```
 
+## API usage example
+
+```py
+# This script should be placed at the same directory level as webapp.py
+from snips_api import Snippet, RootSnippet
+
+# Make some snippets:
+s_start = RootSnippet(9000, 'Dr. Smith: "Okay, last question. If a runaway train is bearing down--"')
+s_nointerrupt = Snippet('Dr. Smith: "--well, actually, I think you know the rest of it. What do you think?"')
+s_nointerrupt2 = Snippet('Dr. Smith: "Hmm, I see. Alright, that\'s all for today. Thanks for coming down."')
+s_interrupted = Snippet('Dr. Smith: "Oh. I see. Well then, I think that\'s all for today."')
+end = TerminalSnippet('That was a strange interview...')
+
+# The RootSnippet and TerminalSnippet are basically special cases of Snippets.
+# Imagine that the Snippets form a tree starting from the RootSnippet and
+# ending at the branch tips with TerminalSnippets.
+
+# Add some choices to the snippets. Choices 'connect' snippets.
+s_start.add_choice(
+    "(You've heard this one before...)",
+    next_snippet=s_nointerrupt)
+
+# We can describe how the choice affects various game flags:
+s_nointerrupt.add_choice(
+    "I won't do anything",
+    next_snippet=s_nointerrupt2
+        ).add_modifies_flag('tut_switch_track = 0')
+s_nointerrupt.add_choice(
+    "I'd switch the tracks",
+    next_snippet=s_nointerrupt2
+        ).add_modifies_flag('tut_switch_track = 1')
+
+# The add_check_flag defines conditions for the choice to be selectable.
+# Both add_check and add_modifies methods return their Choice instance,
+# so you can chain these methods together for readability, as shown here.
+s_start.add_choice(
+    "I won't do anything.",
+    next_snippet=s_interrupted
+        ).add_check_flag(
+            'skin_thickness >= 5'
+        ).add_modifies_flag(
+            'tut_board_annoyed += 1'
+        ).add_modifies_flag(
+            'tut_switch_track = 0')
+
+s_nointerrupt2.add_choice(
+  '(Leave)',
+  next_snippet=end)
+s_interrupted.add_choice(
+  '(Leave)',
+  next_snippet=end)
+```
+
+---
 
 # Other files
 
@@ -250,3 +410,6 @@ class snips_api.components.TerminalSnippet(Snippet)
 
 **readme.md**
 >This file.
+
+
+

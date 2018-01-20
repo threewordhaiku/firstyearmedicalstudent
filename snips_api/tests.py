@@ -23,15 +23,16 @@ SAMPLE_TEXT = """
 directive:COMMENT_MARKER //
 directive:ROOT_SNIP_ID 123
 28. Introducing myself, I took a chair and sat beside John.
-    How are you feeling?  -> (29)
-    You’re looking good today. -> (30)
+    How are you feeling?      -> (29)
+    You’re looking good today. ->     30)
         bm_patient += 1
+        Requires                        skin_thickness    >= 5
 
 
 // This is a comment
   // Another comment
-29. John: “Ah, doctor. Not too good…”
-    Next -> (31)                          // Yet another comment
+(29). John: “Ah, doctor. Not too good…”
+    Next -> (31                          // Yet another comment
 30. John: “What?”
     Next
 31. This is going to be a long day...
@@ -41,7 +42,7 @@ directive:ROOT_SNIP_ID 123
 
 def _setup_dburl():
     if 'DATABASE_URL' not in os.environ:
-        os.environ['DATABASE_URL'] = """postgres://bsthemqyqomnye:62b3461d8590acc3ff6d1da2dbdea6149f8dbd4e84c4e4495e5558ae0debecde@ec2-54-227-250-33.compute-1.amazonaws.com:5432/d610ss6vui1oit"""
+        os.environ['DATABASE_URL'] = """postgres://$(whoami)"""
 
 
 class ComponentsTestCase(unittest.TestCase):

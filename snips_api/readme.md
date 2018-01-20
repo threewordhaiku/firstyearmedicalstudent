@@ -4,11 +4,11 @@
 
 ### Contents
 
->[Usage](#usage) |
->[Requirements](#requirements) |
->[Sample usage](#sample) |
->[API documentation](#api) |
->[Other files](#other-files)
+**[Usage](#usage) |**
+**[Requirements](#requirements) |**
+**[Sample usage](#sample) |**
+**[API documentation](#api) |**
+**[Other files](#other-files)**
 
 ### Todo
 
@@ -86,7 +86,8 @@ s_interrupted.add_choice(
 ```
 
 # API
->**Jump to: [Snippet](#snippet) | [Choice](#choice) | [Others](#others)**
+**Jump to: [Snippet](#snippet) | [Choice](#choice) | [Others](#others)**
+
 >Note: all items in snips_api.components can be directly imported from the
 >base snips_api module.
 

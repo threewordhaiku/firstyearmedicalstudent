@@ -258,14 +258,19 @@ def interpret(textlines, comment_marker=None):
 def parse_choice(line_idx, line):
     line = line.strip()
     label = next_ref_num = None
+    ref_num_str = None
 
-    label = line.split('->')[0]
+    label, *ref_num_str = line.split('->', 1)
     if not label:
         complain('Choice', line_idx, 'no label defined')
 
-    s = re.search(r'->\D*(\d+)', line)
-    if s:
+    if ref_num_str:
+        s = re.search(r'(\d+)', ref_num_str[0])
+        if not s:
+            complain('Choice', line_idx, 'no reference number found')
         next_ref_num = int(s.groups()[0])
+
+    label = label.strip()
     
     print('------>   Choice:', label, next_ref_num)
     return label, next_ref_num
@@ -297,7 +302,7 @@ def parse_game_text(line_idx, line):
         complain('Snippet', line_idx, 'does not have a reference number')
     ref_num, game_text = s.groups()
     print('------> gametext:', ref_num, game_text[:20]+'...')
-    return int(ref_num), game_text
+    return int(ref_num), game_text.strip()
 
 
 def get_ref_num(line):

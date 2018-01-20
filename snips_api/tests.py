@@ -16,7 +16,7 @@ Usage:
 import unittest
 import os
 
-from . import snips_parser
+from . import snips_parser, pprint_generator
 from .components import *
 
 SAMPLE_TEXT = """
@@ -95,17 +95,26 @@ class ParsingTestCase(unittest.TestCase):
 
     def test_parse(self):
         parse_output = [
-            ('INSERT INTO snippets(snip_id, game_text) VALUES (%s, %s), (%s, %s), (%s, %s), (%s, %s)', 
+            (
+                'INSERT INTO snippets(snip_id, game_text) VALUES (%s, %s), (%s, %s), (%s, %s), (%s, %s)', 
                 [
                     'John: “Ah, doctor. Not too good…”', 124, 
                     'John: “What?”', 125, 
                     'This is going to be a long day...', 126, 
                     'Introducing myself, I took a chair and sat beside John.', 123
                 ]
-            ), ('INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', ['How are you feeling?  ', 123, 124, None, None, None, None, None, None]), ('INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', ['You’re looking good today. ', 123, 125, 'bm_patient += 1', None, None, None, None, None]), ('INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', ['Next ', 124, 126, None, None, None, None, None, None]), ('INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
-                [
-                    'Next', 125, 126, None, None, None, None, None, None
-                ]
+            ), (
+                'INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                ['How are you feeling?', 123, 124, None, None, None, None, None, None]
+            ), (
+                'INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
+                ['You’re looking good today.', 123, 125, 'bm_patient += 1', None, None, 'skin_thickness >= 5', None, None]
+            ), (
+                'INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
+                ['Next', 124, 126, None, None, None, None, None, None]
+            ), (
+                'INSERT INTO choices(choice_label, snip_id, next_snip_id, mod_flg_1, mod_flg_2, mod_flg_3, check_flg_1, check_flg_2, check_flg_3) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
+                ['Next', 125, 126, None, None, None, None, None, None]
             )
         ]
         output = [x for x in snips_parser.parse(SAMPLE_TEXT)]

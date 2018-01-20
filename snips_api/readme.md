@@ -121,7 +121,7 @@ number must be unique within the string. Reference numbers can be surrounded
 by any kind of symbol(s).
 
 You can force snippet reference numbers to be used as snip_ids using the 
-`REF_NUMS_ARE_SNIP_IDS` [directive].
+`REF_NUMS_ARE_SNIP_IDS` [directive](#formatting-directives).
 
 Here is an example of how snippets are formatted. Note that while there are no
 restrictions on how the reference numbers are enclosed, I recommend picking a
@@ -150,7 +150,7 @@ by the snippet's reference number. If you do not indicate the target snippet
 link to the next immediate snippet that follows.
 
 Below is an example of how choices are formatted -- in the example, the 
-"So, John..." option implicitly points to snippet 29 below it, while the  
+"So, John..." option implicitly points to snippet 29 below it, while the
 "looking good" option explicitly points to snippet 30.
 
 Note that while there are no restrictions on how the reference numbers are 
@@ -391,7 +391,21 @@ s_interrupted.add_choice(
   next_snippet=end)
 ```
 
----
+# Utilities
+
+These utilities are defined within `snips_api.__init__.py`.
+
+```
+pprint_generator(gen, maxcols=60)
+  Pretty-prints the generator output from Snippet.generate_chain_sql().
+  Takes an optional maxcols arg to change the maximum length that the printed
+  lines truncate to.
+  
+  Usage:
+    gen = my_snippet.generate_chain_sql()
+    pprint_generator(gen)
+```
+
 
 # Other files
 
@@ -413,4 +427,6 @@ s_interrupted.add_choice(
 >This file.
 
 
+**tests.py**
+>Unit tests for the module.
 

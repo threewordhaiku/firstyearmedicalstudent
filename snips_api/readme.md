@@ -12,19 +12,15 @@ database without having to use SQL directly.
 **[Utilities](#utilities) |**
 **[Other files](#other-files)**
 
-**Todo**
-
-- Update readme to cover the `snips_parser`
-
-
-
 # Usage
+
 This module is intended to be used as a scriptable interface for the database.
 The module is currently functioning, but still in testing for use with the 
 main game app.
 
 
 # Requirements
+
 You should know [how to define your `DATABASE_URL` environment variable][1] 
 to point to the database that you intend to insert the snippets into. Database 
 access is necessary for automatic assignment of snip_ids to your snippets. 

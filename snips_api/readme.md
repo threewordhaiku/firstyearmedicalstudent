@@ -3,20 +3,19 @@
 This is a module for adding game text (both snippets and choices) to the 
 database without having to use SQL directly.
 
-## Contents
-
-**[Usage](#usage) |**
-**[Requirements](#requirements) |**
-**[Parser](#parser) |**
-**[API](#api) |**
-**[Utilities](#utilities) |**
-**[Other files](#other-files)**
+>**Contents:**
+>**[Usage](#usage) |**
+>**[Requirements](#requirements) |**
+>**[Parser](#parser) |**
+>**[API](#api) |**
+>**[Utilities](#utilities) |**
+>**[Other files](#other-files)**
 
 # Usage
 
 This module is intended to be used as a scriptable interface for the database.
-The module is currently functioning, but still in testing for use with the 
-main game app.
+The module is currently functioning, but probably still needs more stringent
+testing.
 
 
 # Requirements

@@ -1,26 +1,36 @@
 # snips_api
-*A module for writing Snippets to database*
-#### Table of Contents
-[Usage](#usage)
-[Requirements](#requirements)
-[Sample usage](#sample)
-[API documentation](#api)
-[Other files](#other-files)
+
+*A module for writing Snippets to the database*
+
+### Contents
+
+>[Usage](#usage) |
+>[Requirements](#requirements) |
+>[Sample usage](#sample) |
+>[API documentation](#api) |
+>[Other files](#other-files)
+
+### Todo
+
+- Update readme to cover the `snips_parser`
 
 
 
 # Usage
-This module is intended to be used as a scriptable interface for the database. 
-The interfaces here are (currently) not meant for use with the main game app.
+This module is intended to be used as a scriptable interface for the database.
+The module is currently functioning, but still in testing for use with the 
+main game app.
 
 # Requirements
-You should know how to define your DATABASE_URL environment variable to point 
-to the database that you intend to insert the snippets into. Database access 
-is necessary for automatic assignment of snip_ids to your snippets. 
+You should know [how to define your `DATABASE_URL` environment variable][1] 
+to point to the database that you intend to insert the snippets into. Database 
+access is necessary for automatic assignment of snip_ids to your snippets. 
 
 The database connection will only be created the first time you call 
-Snippet.generate_chain_sql(). You do not need the database connection if you 
-do not intend to commit your snippets to the database.
+[Snippet.generate_chain_sql()](#snippet). You do not need the database 
+connection if you do not intend to commit your snippets to the database.
+
+[1]: https://trello.com/c/rzDEieoG/70-heroku-app-deployment-steps
 
 
 # Sample
@@ -76,9 +86,7 @@ s_interrupted.add_choice(
 ```
 
 # API
->Jump to: [Snippet](#snippet) | [Choice](#choice) | [Others](#others)
-
-
+>**Jump to: [Snippet](#snippet) | [Choice](#choice) | [Others](#others)**
 >Note: all items in snips_api.components can be directly imported from the
 >base snips_api module.
 

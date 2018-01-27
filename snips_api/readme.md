@@ -66,13 +66,13 @@ function's output to the database:
 
 ```py
 # This script should be placed at the same directory level as webapp.py
-from snips_api import snips_parser as sp
-from db_tools import QuickCursor
+from snips_api import snips_parser
+from db_tools import AppCursor
 
-with open('misc_files/sample_parser_text.txt', 'r') as f:
+with open('misc_files/sample_parser_text.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
-with QuickCursor() as cur:
+with AppCursor() as cur:
     for sql, data in snips_parser.parse(text):
         cur.execute(sql, data)
 ```

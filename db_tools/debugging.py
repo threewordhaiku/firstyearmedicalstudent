@@ -14,7 +14,7 @@ from . import AppCursor
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 def exec_file_to_db(abs_filepath):
-    with open(abs_filepath) as f:
+    with open(abs_filepath, encoding='utf-8') as f:
         content = f.read()
     with AppCursor() as cur:
         cur.execute(content)

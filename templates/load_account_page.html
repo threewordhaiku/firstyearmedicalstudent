@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block content %}
+      <div class="template">
+        <h2>
+          You are a first-year<br />
+          medical student.
+        </h2>
+        <hr />
+        
+        <div>
+          <form action="#load_game_placeholder" style="text-align: left;">
+            <label for="name"><strong>Load Game</strong></label>
+            <input type="text" id="name" name="name" placeholder="Enter Game Code">
+            <br /><br />
+            <a href="{{ url_for('main_page') }}"><button type="button" class="nxtbtn btn-left rounded-0" style="float: left">
+              Back to Main
+            </button></a>       
+            <a href="#game_placeholder"><button type="button" class="nxtbtn btn-right rounded-0" style="float: right">
+              Submit
+            </button></a>
+          </form>
+        </div>
+
+      </div>
+{% endblock %}

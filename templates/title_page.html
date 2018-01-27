@@ -1,38 +1,12 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Project Nigirite">
-    <meta name="author" content="Nigirite">
-    <link rel="icon" href="https://myanimelist.cdn-dena.com/r/360x360/images/characters/11/242945.jpg?s=1525e676b23f4e391bfbfe5dc88b0b8b">
+{% extends "index.html" %}
 
-    <title>You are a first-year medical student</title>
+{% block head %}
+    <link href="{{ url_for('static', filename='title_page.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='title_page.js') }}"></script>
+{% endblock %}
 
-    <script src="../static/core/libs/jquery.js"></script>
-    <script src="../static/style.js"></script>
-    
-    <!-- Page scripts -->
-    <script src="../static/main_page.js"></script>
 
-    <style>
-      .startmenu {
-        display: inline;
-      }
-    </style>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../static/core/libs/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="../static/core/style.css" rel="stylesheet">
-    <link href="../static/title_page.css" rel="stylesheet">
-  </head>
-
-<!-- Main
-************************************************* -->
-  <body>
-    <main role="main" class="container">
+{% block content %}
       <div class="template">
         <h2>
           You are a first-year<br />
@@ -42,8 +16,12 @@
         
         <!-- Start Menu Button -->
         <div class="startmenu">
-          <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_new">New</button>
-          <a href="load_account_page.html"><button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_load">Load</button></a>
+          <a href="#game_placeholder">
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_new">New</button>
+          </a>
+          <a href="{{ url_for('load') }}">
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-0">Load</button>
+          </a>
         </div>
 
       </div>
@@ -60,4 +38,4 @@
         <br />
         <a href="new_account_page.html"><button type="button" class="btn btn-main rounded-0 startbtn"><span>Start</span></button></a>
       </div>
-    </main>
+{% endblock %}

@@ -7,36 +7,27 @@
     <meta name="author" content="Nigirite">
     <link rel="icon" href="{{ url_for('static', filename='core/favicon.ico') }}">
 
-    <!--
     <title>You are a first-year medical student</title>
 
-    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
-    
-    <- Page scripts ->
+    <script src="{{ url_for('static', filename='core/libs/jquery.js') }}"></script>
+        
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='core/libs/bootstrap.min.css') }} " rel="stylesheet">
+
+    <!-- Libs -->
+    <script src="{{ url_for('static', filename='core/libs/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='core/libs/jquery-ui.js') }}"></script>
+    <link href="{{ url_for('static', filename='core/libs/jquery-ui.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='core/libs/bootstrap.min.css') }}" rel="stylesheet">
+            
+    <!-- Core components -->
+    <link href="{{ url_for('static', filename='core/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='core/settings.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='core/settings.js') }}"></script>
+    <!-- Is this supposed to exist? -Wilson <script src="../static/style.js"></script> -->
+
     {% block head %}
     {% endblock %}
-    
-    <- Bootstrap core CSS ->
-    <link href="{{ url_for('static', filename='bootstrap.min.css') }} " rel="stylesheet">
-
-    <- Custom styles for this template ->
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"> 
-
-            <-remove this later -->
-            <title>You are a first-year medical student</title>
-
-            <!-- Libs -->
-            <script src="../static/core/libs/jquery.js"></script>
-            <script src="../static/core/libs/jquery-ui.js"></script>
-            <link href="../static/core/libs/jquery-ui.css" rel="stylesheet">
-            <link href="../static/core/libs/bootstrap.min.css" rel="stylesheet">
-            
-            <!-- Core components -->
-            <link href="../static/core/style.css" rel="stylesheet">
-            <link href="../static/core/settings.css" rel="stylesheet">
-            <script src="../static/core/settings.js"></script>
-            <!-- Is this supposed to exist? -Wilson <script src="../static/style.js"></script> -->
-
   </head>
 
   <body>
@@ -59,7 +50,7 @@
             <div>       
               <strong>Master Volume:&nbsp</strong>
               <input type="button" value="-" id="minus_mastervol" class="plusminusbtn">
-              <span class= "slider_value" name= "master_volume_value" id="master_volume_value" style="color:black;font-weight:bold;">50</span>
+              <span class= "slider_value" name= "master_volume_value" id="master_volume_value">50</span>
               <input type="button" value="+" id="plus_mastervol" class="plusminusbtn">
             </div>
             <!-- Slider -->
@@ -73,7 +64,7 @@
             <div>       
               <strong>SFX Volume:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong>
               <input type="button" value="-" id="minus_sfxvol" class="plusminusbtn">
-              <span class= "slider_value" name= "sfx_volume_value" id="sfx_volume_value" style="color:black;font-weight:bold;">50</span>
+              <span class= "slider_value" name= "sfx_volume_value" id="sfx_volume_value">50</span>
               <input type="button" value="+" id="plus_sfxvol" class="plusminusbtn">
             </div>
             <!-- Slider -->
@@ -87,7 +78,7 @@
             <div>       
               <strong>BGM Volume:&nbsp&nbsp&nbsp&nbsp</strong>
               <input type="button" value="-" id="minus_bgmvol" class="plusminusbtn">
-              <span class= "slider_value" name= "bgm_volume_value" id="bgm_volume_value" style="color:black;font-weight:bold;">50</span>
+              <span class= "slider_value" name= "bgm_volume_value" id="bgm_volume_value">50</span>
               <input type="button" value="+" id="plus_bgmvol" class="plusminusbtn">
             </div>
             <!-- Slider -->
@@ -108,19 +99,22 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-              <a class="nav-link text-dark" href="{{ url_for('main_page') }}">Home</a>
+            <a class="nav-link text-dark" href="{{ url_for('main_page') }}">Home</a>
           </li>
           <li class="nav-item active">
-              <a target="_blank" class="nav-link text-muted" href="https://github.com/threewordhaiku/firstyearmedicalstudent">GitHub</a>
-          </li>
-          <li class="nav-item active">
-              <a class="nav-link text-muted debugging" href="{{ url_for('debug_database') }}" >Database</a>
+            <a class="nav-link text-dark" href="{{ url_for('load') }}">Load</a>
           </li>
           <li class="nav-item active">
             <!-- Settings Button -->
-            <div class="settingsbtn">
-            <a href="#settings_screen" id="settings_toggle" class="settings_toggle">Settings</a>
-            </div>              
+            <a class="nav-link text-dark settings_toggle" href="#settings_screen">
+              <span class="settingsbtn">Settings</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a target="_blank" class="nav-link text-muted" href="https://github.com/threewordhaiku/firstyearmedicalstudent">GitHub</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-muted debugging" href="{{ url_for('debug_database') }}" >Database</a>
           </li>
         </ul>
       </div>

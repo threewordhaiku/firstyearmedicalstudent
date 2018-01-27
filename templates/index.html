@@ -5,21 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Project Nigirite">
     <meta name="author" content="Nigirite">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" href="{{ url_for('static', filename='core/favicon.ico') }}">
 
     <title>You are a first-year medical student</title>
 
-    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
-    
-    <!-- Page scripts -->
+    <script src="{{ url_for('static', filename='core/libs/jquery.js') }}"></script>
+        
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='core/libs/bootstrap.min.css') }} " rel="stylesheet">
+
+    <!-- Libs -->
+    <script src="{{ url_for('static', filename='core/libs/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='core/libs/jquery-ui.js') }}"></script>
+    <link href="{{ url_for('static', filename='core/libs/jquery-ui.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='core/libs/bootstrap.min.css') }}" rel="stylesheet">
+            
+    <!-- Core components -->
+    <link href="{{ url_for('static', filename='core/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='core/settings.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='core/settings.js') }}"></script>
+    <!-- Is this supposed to exist? -Wilson <script src="../static/style.js"></script> -->
+
     {% block head %}
     {% endblock %}
-    
-    <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='bootstrap.min.css') }} " rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
   </head>
 
   <body>
@@ -29,6 +37,61 @@
       {% block content %}
       {% endblock %}
 
+      <!--Settings Screen -->
+      <div id="settings_screen">
+        <!-- Back Button -->
+        <a href="#" class="cancel_button">&times;</a>
+        <!-- Settings and stuff -->
+        <div class="settings">
+          <h4>Settings</h4>
+
+          <div> <!-- Master Volume -->
+            <!-- Label and Buttons -->
+            <div>       
+              <strong>Master Volume:&nbsp</strong>
+              <input type="button" value="-" id="minus_mastervol" class="plusminusbtn">
+              <span class= "slider_value" name= "master_volume_value" id="master_volume_value">50</span>
+              <input type="button" value="+" id="plus_mastervol" class="plusminusbtn">
+            </div>
+            <!-- Slider -->
+            <p></p>
+            <div id="master_volume" ></div>
+            <br />
+          </div>  
+
+          <div> <!-- SFX Volume -->
+            <!-- Label and Buttons -->
+            <div>       
+              <strong>SFX Volume:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong>
+              <input type="button" value="-" id="minus_sfxvol" class="plusminusbtn">
+              <span class= "slider_value" name= "sfx_volume_value" id="sfx_volume_value">50</span>
+              <input type="button" value="+" id="plus_sfxvol" class="plusminusbtn">
+            </div>
+            <!-- Slider -->
+            <p></p>
+            <div id="sfx_volume" ></div>
+            <br />
+          </div> 
+
+          <div> <!-- BGM Volume -->
+            <!-- Label and Buttons -->
+            <div>       
+              <strong>BGM Volume:&nbsp&nbsp&nbsp&nbsp</strong>
+              <input type="button" value="-" id="minus_bgmvol" class="plusminusbtn">
+              <span class= "slider_value" name= "bgm_volume_value" id="bgm_volume_value">50</span>
+              <input type="button" value="+" id="plus_bgmvol" class="plusminusbtn">
+            </div>
+            <!-- Slider -->
+            <p></p>
+            <div id="bgm_volume" ></div>
+            <br />
+          </div> 
+
+        </div>
+      </div>
+      <!-- Shaded Overlay -->
+      <div id="cover"></div>
+
     </main><!-- /.container -->
 
     
@@ -36,13 +99,22 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-              <a class="nav-link text-dark" href="{{ url_for('main_page') }}">Home</a>
+            <a class="nav-link text-dark" href="{{ url_for('main_page') }}">Home</a>
           </li>
           <li class="nav-item active">
-              <a target="_blank" class="nav-link text-muted" href="https://github.com/threewordhaiku/firstyearmedicalstudent">GitHub</a>
+            <a class="nav-link text-dark" href="{{ url_for('load') }}">Load</a>
           </li>
           <li class="nav-item active">
-              <a class="nav-link text-muted debugging" href="{{ url_for('debug_database') }}" >Database</a>
+            <!-- Settings Button -->
+            <a class="nav-link text-dark settings_toggle" href="#settings_screen">
+              <span class="settingsbtn">Settings</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a target="_blank" class="nav-link text-muted" href="https://github.com/threewordhaiku/firstyearmedicalstudent">GitHub</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-muted debugging" href="{{ url_for('debug_database') }}" >Database</a>
           </li>
         </ul>
       </div>
@@ -53,8 +125,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
-    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery-slim.min.js') }}"><\/script>')</script>
-    <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script>window.jQuery || document.write("<script src=\"{{ url_for('static', filename='core\/libs\/jquery-slim.min.js') }}\"><\/script>")</script>
+    <script src="{{ url_for('static', filename='core/libs/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='core/libs/bootstrap.min.js') }}"></script>
   </body>
 </html>

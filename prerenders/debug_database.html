@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Project Nigirite">
+    <meta name="author" content="Nigirite">
+    <link rel="icon" href="../static/favicon.ico">
+
+    <title>You are a first-year medical student</title>
+
+    <script src="../static/jquery.js"></script>
+    
+    <!-- Page scripts -->
+    
+    <script src="../static/debug_database.js"></script>
+
+    <!-- Scripts for blueimp/jQuery-File-Upload -->
+    <script src="../static/jquery.ui.widget.js"></script>
+    <script src="../static/jquery.iframe-transport.js"></script>
+    <script src="../static/jquery.fileupload.js"></script>
+
+    <style>
+    .startmenu {
+      display: inline;
+      margin: 0.5rem !important;
+    }
+
+    .template {
+      padding: .5rem !important;
+      margin: .5rem !important; 
+      display: block;
+    }
+
+    #downloadbutton, #uploadbutton {
+      margin: 0.1rem;
+    }
+
+    .selected-table {
+      margin: 0.5rem;
+    }
+
+    #fileupload {
+      display:none;
+    }
+
+    .thead-light {
+      color: #495057;
+      background-color: #e9ecef;
+    }
+    </style>
+
+    
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap.min.css " rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <main role="main" class="container">
+
+      
+      <div class="template">
+        <h2>
+          Debugging tables
+        </h2>
+        <hr />
+
+        <div class="startmenu">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select table
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="/database/saved_games">saved_games</a>
+              <a class="dropdown-item" href="/database/snippets">snippets</a>
+              <a class="dropdown-item" href="/database/choices">choices</a>
+            </div>
+          </div>
+  
+          <div class="selected-table">
+            <p>
+              Showing results for table <code>snippets</code>
+              (10 rows)
+            </p>
+            <button type="button" class="btn btn-inverted" id="downloadbutton">
+              Download <code>snippets</code>
+            </button>
+            <button type="button" class="btn btn-inverted" id="uploadbutton">
+              Upload to <code>snippets</code>
+            </button>
+            <input id="fileupload" class="btn btn-inverted" type="file" accept="text/csv" name="file" data-url="/database/snippets/upload">
+          </div>
+          <script>
+          $(function () {
+              $('#fileupload').fileupload({
+                  dataType: 'json',
+                  done: function (e, data) {
+                    alert(Object.values(data.response().result) + ' uploaded successfully, reloading page.');
+                    window.location.href = window.location.href;
+                  }
+              });
+          });
+          </script>
+          <script>
+          $(document).ready(function() {
+            // $('.container').addClass('d-flex');
+            // $('.container').addClass('p-2');
+            $('#uploadbutton').click(function() {
+              $("input[type='file']").trigger('click');
+            });
+
+            $('#downloadbutton').click(function() {
+              window.location.href = "/database/snippets/download";
+            });
+          });
+          </script>
+  
+        </div>
+      </div>
+
+  
+      
+      <table class="table table-sm">
+    
+      
+        <thead class="thead-light">
+          <tr>
+            
+            <th scope="col">this</th>
+            
+            <th scope="col">is</th>
+            
+            <th scope="col">a</th>
+            
+            <th scope="col">sample</th>
+            
+            <th scope="col">db</th>
+            
+            <th scope="col">response</th>
+            
+          </tr>
+        </thead>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      
+        <tbody>
+          <tr>
+        
+          
+            <th scope="row">a</th>
+          
+        
+          
+            <td>b</td>
+          
+        
+          
+            <td>c</td>
+          
+        
+          
+            <td>d</td>
+          
+        
+          
+            <td>e</td>
+          
+        
+          
+            <td>f</td>
+          
+        
+          </tr>
+        </tbody>
+      
+    
+      </table>
+
+  
+
+
+    </main><!-- /.container -->
+
+    
+    <footer class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-light">
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+              <a class="nav-link text-dark" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+              <a target="_blank" class="nav-link text-muted" href="https://github.com/threewordhaiku/firstyearmedicalstudent">GitHub</a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link text-muted debugging" href="/database" >Database</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+
+    
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script>window.jQuery || document.write('<script src="../static/jquery-slim.min.js"><\/script>')</script>
+    <script src="../static/popper.min.js"></script>
+    <script src="../static/bootstrap.min.js"></script>
+  </body>
+</html>

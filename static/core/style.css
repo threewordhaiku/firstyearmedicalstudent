@@ -1,0 +1,165 @@
+/* Core CSS
+--------------------------------------------------*/
+
+body {
+  padding-top: 5rem;
+}
+
+a, a:hover {
+  color: black;
+}
+
+
+.template {
+  padding: 3rem 1.5rem;
+  margin:6rem;
+  text-align: center;
+}
+
+/* Buttons
+--------------------------------------------------*/
+
+.btn-outline-secondary {
+  color: #000;
+  background-color: #fff;
+  border-color: #000;
+  border: 2px solid;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #000;
+  border-color: #000;
+}
+
+.btn-right {
+  color: #000;
+  background-color: #fff;
+  border-color: #000;
+  border: 2px solid;
+  color: black;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  margin-right: 0;
+}
+
+.btn-right span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.btn-right span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.btn-right:hover span {
+  padding-right: 25px;
+}
+
+.btn-right:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.btn-left {
+  color: #000;
+  background-color: #fff;
+  border-color: #000;
+  border: 2px solid;
+  color: black;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  margin-left: 0;
+}
+
+.btn-left span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.btn-left span:after {
+  content: '\00ab';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: -2px;
+  transition: 0.5s;
+}
+
+.btn-left:hover span {
+  padding-left: 25px;
+}
+
+.btn-left:hover span:after {
+  opacity: 1;
+  left: 0;
+}
+
+
+
+
+
+/* BOILERPLATES */
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 60px; /* Margin bottom by footer height */
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Set the fixed height of the footer here */
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
+
+
+
+
+
+/* Bootstrap theme CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+}
+
+.textbox {
+  padding:0;
+  margin:10rem;
+  text-align: center;
+  margin-left:auto;
+  margin-right:auto;
+  width: 700px;
+  height: 100px;
+  max-width: 680px;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 8px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: none; 
+    box-sizing: border-box;
+}

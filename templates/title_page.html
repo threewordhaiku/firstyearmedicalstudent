@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block head %}
+    <link href="{{ url_for('static', filename='title_page.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='title_page.js') }}"></script>
+{% endblock %}
+
+
+{% block content %}
+      <div class="template">
+        <h2>
+          You are a first-year<br />
+          medical student.
+        </h2>
+        <hr />
+        
+        <!-- Start Menu Button -->
+        <div class="startmenu">
+          <a href="#game_placeholder">
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-0 SMB_new">New</button>
+          </a>
+          <a href="{{ url_for('load') }}">
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-0">Load</button>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Starting Desc. -->
+      <div class="container text-center game-content">
+        <p>
+          You will be making ethical decisions about....
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+        <p></p>
+        <br />
+        <a href="game.html"><button type="button" class="btn btn-main rounded-0 startbtn"><span>Start</span></button></a>
+      </div>
+{% endblock %}

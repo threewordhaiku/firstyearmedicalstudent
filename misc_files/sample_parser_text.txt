@@ -1,38 +1,23 @@
-directive:COMMENT_MARKER #
+directive:COMMENT_MARKER //
 directive:ROOT_SNIP_ID 999
-23. I looked at the tablet Dr. Hanson had given to me. There was a list of patients I was tasked with checking on.
-    Next
-24. “John Doe, bed 1, admitted 8 March, 1423hrs. Severe diarrhea and vomiting. Follow up required.”
-    Next
-25. The details of the first patient in the ward were displayed on the screen next to a picture of a plump young man. Judging from the other details provided on the screen, it probably wasn’t the first time that he had been warded in Nigirite General.
-    Next
-26. I walked up to the first bed in the ward and drew the curtains. A scrawny figure lay still on the bed. His cheeks were hollow, skin pale, and he seemed to have difficulty breathing. 
-    Next
-27. I almost thought I had the wrong person until I noticed the nameplate behind the bedrest. The illness has certainly taken a toll on John.  
-    Next
 
-(28..... Introducing myself, I took a chair and sat beside John.
+28. Introducing myself, I took a chair and sat beside John.
     How are you feeling?  -> (29)
     You’re looking good today. -> (30)
         bm_patient += 1
         Requires skin_thickness >= 5
-(29) John: “Ah, doctor. Not too good…”
-    Next -> ->34;
+
+29. John: “Ah, doctor. Not too good…”
+    Next -> 34
+
 30. John: “What?”
     I mean, how are you feeling today?  -> (29)
     I mean, you look great today! -> (31)
         bm_patient += 1
-31. John: “...”  # This is a comment
+
+31. John: “...”  // This is a comment
     So, how are you feeling?  -> (29)
     In fact, you look like you can go home already… -> (32)
         johndoe_death += 1
         patient_deaths += 1
-        # Indented comment
-32. I signed the paperwork required to discharge John and handed it over to the nurse
-    Next -> (33)
-# Another comment
-33. John’s family was surprised by the turn of events but started packing his things in preparation for his return home.
-    Next -> (35)
-34. With some difficulty, John tells you about the increasing numbness he feels in his face and limbs. Unsure of what to do, you assure him that those are merely side-effects from the anaesthetics prescribed to him.
-    Next
-35. Wishing the best for John, you move on to the next patient.
+        // An indented comment

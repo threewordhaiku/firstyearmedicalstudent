@@ -17,7 +17,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def main_page():
-    return render_template('main_page.html')
+    return render_template('title_page.html')
+
+
+@app.route('/load')
+def load():
+    return render_template('load_account_page.html')
 
 
 @app.route('/database')

@@ -82,7 +82,7 @@ def upload_table(table_name, csv):
     engine = create_engine(DB_URL)
     #Reads the csv file to a pandas dataframe
     #Skip first 2 rows; they are table name and header row
-    csv_data = pd.read_csv(csv, delimiter='|', skiprows=2)
+    csv_data = pd.read_csv(csv, delimiter='|', skiprows=1, header=0)
     
     #Insert Dataframe to sql
     #If table exists, drop it. Cascade option drops foreign key dependents.
@@ -90,7 +90,7 @@ def upload_table(table_name, csv):
         cur.execute("DROP TABLE IF EXISTS {} CASCADE;".format(table_name))
 
     #Recreate table, and insert data. Create if does not exist.
-    csv_data.to_sql(table_name, engine, if_exists='replace')
+    csv_data.to_sql(table_name, engine, index=False)
     return
 
 def load_snippets(snip_id):
